@@ -51,7 +51,7 @@ describe("FileGallery", () => {
     expect(link?.getAttribute("target")).toBe("_blank");
     expect(link?.querySelector("img")?.getAttribute("src")).toBe(file().thumbnailUrl);
     expect(screen.getByText("PDF")).toBeTruthy();
-    expect(loadFiles).toHaveBeenCalledWith(COLLECTION, 5);
+    expect(loadFiles).toHaveBeenCalledWith(COLLECTION, 5, undefined);
   });
 
   it("explains a refused request as missing access", async () => {
@@ -64,5 +64,28 @@ describe("FileGallery", () => {
     const loadFiles = jest.fn().mockResolvedValue({ files: [], total: 0 });
     render(<FileGallery collectionId={COLLECTION} maxItems={0} loadFiles={loadFiles} />);
     expect(await screen.findByText(MESSAGES.empty)).toBeTruthy();
+  });
+
+  it("marks the layout so the list can show the image left of the details", async () => {
+    const loadFiles = jest.fn().mockResolvedValue({ files: [file()], total: 1 });
+    render(<FileGallery collectionId={COLLECTION} maxItems={0} layout="list" loadFiles={loadFiles} />);
+    await screen.findByText("Fahrerhaus.png");
+    expect(screen.getByTestId("file-gallery").className).toContain("man-file-gallery--list");
+  });
+
+  it("hands the filter to the loader and names a filter without matches", async () => {
+    const loadFiles = jest.fn().mockResolvedValue({ files: [], total: 0 });
+    render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="pdf$" loadFiles={loadFiles} />);
+    expect(await screen.findByText(MESSAGES.noMatch)).toBeTruthy();
+    const accept = loadFiles.mock.calls[0][2] as (f: GalleryFile) => boolean;
+    expect(accept(file({ fileName: "x.PDF" }))).toBe(true);
+    expect(accept(file({ fileName: "x.png" }))).toBe(false);
+  });
+
+  it("shows an invalid filter as an error and loads nothing", () => {
+    const loadFiles = jest.fn();
+    render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="(" loadFiles={loadFiles} />);
+    expect(screen.getByRole("alert").textContent).toContain(MESSAGES.badFilter);
+    expect(loadFiles).not.toHaveBeenCalled();
   });
 });

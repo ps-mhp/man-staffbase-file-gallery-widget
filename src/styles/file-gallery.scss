@@ -29,6 +29,11 @@
   list-style: none;
 }
 
+.man-file-gallery__grid--list {
+  grid-template-columns: 1fr;
+  gap: man("space-3");
+}
+
 .man-file-gallery__item {
   margin: 0;
   min-width: 0;
@@ -49,6 +54,30 @@
   &:hover .man-file-gallery__name {
     color: man("link-hover");
     text-decoration: underline;
+  }
+}
+
+// Liste: Bild links in fester Breite, Name und Details rechts daneben.
+.man-file-gallery--list .man-file-gallery__link {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  grid-template-areas: "preview name" "preview meta";
+  grid-template-rows: auto 1fr;
+  column-gap: man("space-4");
+  align-items: start;
+  height: auto;
+
+  .man-file-gallery__preview {
+    grid-area: preview;
+  }
+
+  .man-file-gallery__name {
+    grid-area: name;
+    align-self: end;
+  }
+
+  .man-file-gallery__meta {
+    grid-area: meta;
   }
 }
 

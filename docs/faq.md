@@ -19,3 +19,11 @@ Antwort: Die Collection ist leer. Dateien im Datei-Manager hineinlegen.
 Antwort: Die Anfrage ist fehlgeschlagen, z. B. weil die Collection gelöscht
 wurde oder die Verbindung abbrach. Seite neu laden; bleibt die Meldung, die
 Collection in den Einstellungen neu auswählen.
+
+**Frage:** Das Widget zeigt „Keine Datei passt zum Filter.“
+
+Antwort: Kein Dateiname in der Collection passt zum Ausdruck im Feld **Filter (regulärer Ausdruck)**. Ausdruck prüfen oder das Feld leeren.
+
+**Frage:** Das Widget zeigt „Der Filter ist kein gültiger regulärer Ausdruck: …“
+
+Antwort: Der Ausdruck enthält einen Syntaxfehler, z. B. eine nicht geschlossene Klammer. Korrigieren oder das Feld leeren.

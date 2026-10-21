@@ -11,7 +11,13 @@
  * limitations under the License.
  */
 
-import { CollectionError, collectionCatalogSource, fetchCollectionFiles, toGalleryFile } from "./file-collection";
+import {
+  CollectionError,
+  collectionCatalogSource,
+  fetchCollectionFiles,
+  parseFileFilter,
+  toGalleryFile,
+} from "./file-collection";
 
 const COLLECTION = "699465f50cd34b34daa5c188";
 
@@ -56,7 +62,7 @@ describe("fetchCollectionFiles", () => {
       .mockResolvedValueOnce(json({ entries: [entry(id(1)), entry(id(2))], cursor: "next", total: 5 }))
       .mockResolvedValueOnce(json({ entries: [entry(id(3)), entry(id(4))], cursor: "more", total: 5 }));
 
-    const page = await fetchCollectionFiles(COLLECTION, 3, fetchImpl);
+    const page = await fetchCollectionFiles(COLLECTION, 3, undefined, fetchImpl);
 
     expect(page.files.map((f) => f.id)).toEqual([id(1), id(2), id(3)]);
     expect(fetchImpl).toHaveBeenCalledTimes(2);
@@ -69,15 +75,27 @@ describe("fetchCollectionFiles", () => {
       .mockResolvedValueOnce(json({ entries: [entry(id(1))], cursor: "next" }))
       .mockResolvedValueOnce(json({ entries: [], cursor: "next" }));
 
-    const page = await fetchCollectionFiles(COLLECTION, 0, fetchImpl);
+    const page = await fetchCollectionFiles(COLLECTION, 0, undefined, fetchImpl);
 
     expect(page.files).toHaveLength(1);
     expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 
+  it("applies the filter before the limit, so matches behind other files are found", async () => {
+    const fetchImpl = jest.fn().mockResolvedValueOnce(
+      json({
+        entries: [entry(id(1), { fileName: "a.png" }), entry(id(2), { fileName: "b.pdf" }), entry(id(3), { fileName: "c.pdf" })],
+      }),
+    );
+
+    const page = await fetchCollectionFiles(COLLECTION, 1, (f) => f.fileName.endsWith(".pdf"), fetchImpl);
+
+    expect(page.files.map((f) => f.id)).toEqual([id(2)]);
+  });
+
   it("reports the HTTP status of a refused request", async () => {
     const fetchImpl = jest.fn().mockResolvedValue(new Response("", { status: 403 }));
-    await expect(fetchCollectionFiles(COLLECTION, 0, fetchImpl)).rejects.toMatchObject({
+    await expect(fetchCollectionFiles(COLLECTION, 0, undefined, fetchImpl)).rejects.toMatchObject({
       name: "CollectionError",
       status: 403,
     });
@@ -85,7 +103,7 @@ describe("fetchCollectionFiles", () => {
 
   it("refuses an id that is not a Staffbase id without asking the API", async () => {
     const fetchImpl = jest.fn();
-    await expect(fetchCollectionFiles("../users", 0, fetchImpl)).rejects.toBeInstanceOf(CollectionError);
+    await expect(fetchCollectionFiles("../users", 0, undefined, fetchImpl)).rejects.toBeInstanceOf(CollectionError);
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 });
@@ -106,5 +124,17 @@ describe("collectionCatalogSource", () => {
       id: id(1),
       title: "Alle Bilder (462 Dateien)",
     });
+  });
+});
+
+describe("parseFileFilter", () => {
+  it("treats an empty pattern as no filter and matches case-insensitively", () => {
+    expect(parseFileFilter("  ")).toBeNull();
+    const filter = parseFileFilter("\\.pdf$");
+    expect(filter && "regex" in filter && filter.regex.test("Bericht.PDF")).toBe(true);
+  });
+
+  it("reports an invalid expression instead of throwing", () => {
+    expect(parseFileFilter("(")).toEqual({ error: expect.any(String) });
   });
 });

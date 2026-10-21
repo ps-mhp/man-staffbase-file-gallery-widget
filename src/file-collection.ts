@@ -132,11 +132,12 @@ async function getJson<T>(path: string, fetchImpl: typeof fetch): Promise<T> {
 
 /**
  * Die Dateien einer Collection, in der Reihenfolge der API, höchstens `limit`
- * Stück (`0` = alle).
+ * Stück (`0` = alle); `accept` sortiert Dateien vorab aus.
  */
 export async function fetchCollectionFiles(
   collectionId: string,
   limit: number,
+  accept: (file: GalleryFile) => boolean = () => true,
   fetchImpl: typeof fetch = (...args) => fetch(...args),
 ): Promise<CollectionPage> {
   if (!isStaffbaseId(collectionId)) throw new CollectionError("Keine gültige Collection-ID", null);
@@ -154,7 +155,8 @@ export async function fetchCollectionFiles(
     total = typeof page.total === "number" ? page.total : total;
     for (const entry of page.entries ?? []) {
       const file = toGalleryFile(entry);
-      if (file !== null) files.push(file);
+      // Gefiltert wird vor dem Zählen gegen `limit`, sonst fehlten Treffer hinter nicht passenden Dateien.
+      if (file !== null && accept(file)) files.push(file);
     }
     // Ein Cursor ohne neue Einträge würde endlos weiterblättern.
     cursor = (page.entries?.length ?? 0) > 0 ? (page.cursor ?? null) : null;
@@ -188,3 +190,18 @@ export const collectionCatalogSource: EntityCatalogSource<RawCollection> = {
     return { id: entry.id, title: `${name}${count}` };
   },
 };
+
+/**
+ * Der Filter-Ausdruck der Redaktion, ohne Beachtung der Groß-/Kleinschreibung.
+ * `null` heißt: kein Filter; `error` zeigt die View, statt still alles zu zeigen.
+ */
+export type FileFilter = { regex: RegExp } | { error: string } | null;
+
+export function parseFileFilter(pattern: string): FileFilter {
+  if (pattern.trim() === "") return null;
+  try {
+    return { regex: new RegExp(pattern, "i") };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : String(error) };
+  }
+}

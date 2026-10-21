@@ -14,7 +14,13 @@
 import React from "react";
 
 import { useHotStyle } from "@shared/hot-style";
-import { CollectionError, CollectionPage, GalleryFile, fetchCollectionFiles } from "./file-collection";
+import {
+  CollectionError,
+  CollectionPage,
+  GalleryFile,
+  fetchCollectionFiles,
+  parseFileFilter,
+} from "./file-collection";
 import galleryCss from "./styles/file-gallery.scss";
 
 export const MESSAGES = {
@@ -22,6 +28,8 @@ export const MESSAGES = {
   loading: "Dateien werden geladen …",
   empty: "Diese Collection enthält keine Dateien.",
   forbidden: "Sie haben keinen Zugriff auf diese Dateien.",
+  noMatch: "Keine Datei passt zum Filter.",
+  badFilter: "Der Filter ist kein gültiger regulärer Ausdruck",
   failed: "Dateien konnten nicht geladen werden",
 };
 
@@ -33,8 +41,13 @@ type State =
 export interface FileGalleryProps {
   collectionId: string | null;
   maxItems: number;
-  loadFiles?: (collectionId: string, limit: number) => Promise<CollectionPage>;
+  layout?: GalleryLayout;
+  /** Regulärer Ausdruck gegen den Dateinamen; leer = alle Dateien. */
+  filter?: string;
+  loadFiles?: (collectionId: string, limit: number, accept?: (file: GalleryFile) => boolean) => Promise<CollectionPage>;
 }
+
+export type GalleryLayout = "box" | "list";
 
 export function formatBytes(bytes: number | null): string {
   if (bytes === null) return "";
@@ -74,17 +87,22 @@ function FileTile({ file }: { file: GalleryFile }): React.JSX.Element {
 export function FileGallery({
   collectionId,
   maxItems,
+  layout = "box",
+  filter = "",
   loadFiles = fetchCollectionFiles,
 }: FileGalleryProps): React.JSX.Element {
   const liveCss = useHotStyle(galleryCss, "file-gallery-widget", "styles/file-gallery.scss");
   const [state, setState] = React.useState<State>({ status: "loading" });
+  const parsed = React.useMemo(() => parseFileFilter(filter), [filter]);
+  const badFilter = parsed !== null && "error" in parsed ? parsed.error : null;
+  const regex = parsed !== null && "regex" in parsed ? parsed.regex : null;
 
   React.useEffect(() => {
-    if (collectionId === null) return;
+    if (collectionId === null || badFilter !== null) return;
     // Eine geänderte Auswahl macht die laufende Antwort zur falschen.
     let current = true;
     setState({ status: "loading" });
-    loadFiles(collectionId, maxItems)
+    loadFiles(collectionId, maxItems, regex === null ? undefined : (file) => regex.test(file.fileName))
       .then(({ files }) => {
         if (current) setState({ status: "ready", files });
       })
@@ -100,11 +118,17 @@ export function FileGallery({
     return () => {
       current = false;
     };
-  }, [collectionId, maxItems, loadFiles]);
+  }, [collectionId, maxItems, regex, badFilter, loadFiles]);
 
   let body: React.JSX.Element;
   if (collectionId === null) {
     body = <p className="man-file-gallery__status">{MESSAGES.missingCollection}</p>;
+  } else if (badFilter !== null) {
+    body = (
+      <p className="man-file-gallery__status man-file-gallery__status--error" role="alert">
+        {MESSAGES.badFilter}: {badFilter}
+      </p>
+    );
   } else if (state.status === "loading") {
     body = <p className="man-file-gallery__status">{MESSAGES.loading}</p>;
   } else if (state.status === "error") {
@@ -114,10 +138,10 @@ export function FileGallery({
       </p>
     );
   } else if (state.files.length === 0) {
-    body = <p className="man-file-gallery__status">{MESSAGES.empty}</p>;
+    body = <p className="man-file-gallery__status">{regex === null ? MESSAGES.empty : MESSAGES.noMatch}</p>;
   } else {
     body = (
-      <ul className="man-file-gallery__grid">
+      <ul className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
         {state.files.map((file) => (
           <FileTile key={file.id} file={file} />
         ))}
@@ -126,7 +150,7 @@ export function FileGallery({
   }
 
   return (
-    <div className="man-file-gallery" data-testid="file-gallery">
+    <div className={`man-file-gallery man-file-gallery--${layout}`} data-testid="file-gallery">
       <style>{liveCss}</style>
       {body}
     </div>

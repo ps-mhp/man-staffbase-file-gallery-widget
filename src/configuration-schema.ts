@@ -21,6 +21,8 @@ import { JSONSchema7 } from "json-schema";
  */
 export const COLLECTION_ID_ATTRIBUTE = "collection-id";
 export const MAX_ITEMS_ATTRIBUTE = "max-items";
+export const LAYOUT_ATTRIBUTE = "layout";
+export const FILTER_ATTRIBUTE = "filter";
 
 /**
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/
@@ -30,6 +32,19 @@ export const configurationSchema: JSONSchema7 = {
     [COLLECTION_ID_ATTRIBUTE]: {
       type: "string",
       title: "Collection",
+    },
+    [LAYOUT_ATTRIBUTE]: {
+      type: "string",
+      title: "Darstellung",
+      default: "box",
+      oneOf: [
+        { const: "box", title: "Box: Bild oben, Details darunter" },
+        { const: "list", title: "Liste: Bild links, Details rechts" },
+      ],
+    },
+    [FILTER_ATTRIBUTE]: {
+      type: "string",
+      title: "Filter (regulärer Ausdruck)",
     },
     [MAX_ITEMS_ATTRIBUTE]: {
       type: "number",
@@ -48,6 +63,11 @@ export const uiSchema: UiSchema = {
     "ui:help":
       "Die Collection aus dem Datei-Manager wählen, deren Dateien angezeigt werden. Fehlt sie in der Liste, " +
       "„Andere Collection-ID eingeben …“ wählen und die 24-stellige ID eintragen.",
+  },
+  [FILTER_ATTRIBUTE]: {
+    "ui:help":
+      "Zeigt nur Dateien, deren Dateiname zum regulären Ausdruck passt, ohne Beachtung der Groß-/Kleinschreibung. " +
+      "Beispiele: „\\.pdf$“ nur PDFs, „^2026“ Namen mit 2026 am Anfang, „Bericht|Protokoll“ eins von beiden. Leer lassen für alle Dateien.",
   },
   [MAX_ITEMS_ATTRIBUTE]: {
     "ui:help": "0 zeigt alle Dateien der Collection.",

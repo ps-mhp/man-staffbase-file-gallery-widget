@@ -26,17 +26,24 @@ import { startEntityPickerInjector } from "@shared/entity-picker/entity-picker-i
 import { isStaffbaseId } from "@shared/staffbase/ids";
 import {
   COLLECTION_ID_ATTRIBUTE,
+  FILTER_ATTRIBUTE,
+  LAYOUT_ATTRIBUTE,
   MAX_ITEMS_ATTRIBUTE,
   configurationSchema,
   uiSchema,
 } from "./configuration-schema";
 import { collectionCatalogSource } from "./file-collection";
-import { FileGallery } from "./file-gallery";
+import { FileGallery, GalleryLayout } from "./file-gallery";
 import icon from "../resources/file-gallery-widget.svg";
 import pkg from "../package.json";
 
 /** Attributes handled by the widget; mirrored in the configuration schema. */
-const widgetAttributes: string[] = [COLLECTION_ID_ATTRIBUTE, MAX_ITEMS_ATTRIBUTE];
+const widgetAttributes: string[] = [
+  COLLECTION_ID_ATTRIBUTE,
+  MAX_ITEMS_ATTRIBUTE,
+  LAYOUT_ATTRIBUTE,
+  FILTER_ATTRIBUTE,
+];
 
 export function readCollectionId(value: unknown): string | null {
   const id = typeof value === "string" ? value.trim() : "";
@@ -46,6 +53,10 @@ export function readCollectionId(value: unknown): string | null {
 export function readMaxItems(value: unknown): number {
   const number = typeof value === "number" ? value : Number.parseInt(String(value ?? ""), 10);
   return Number.isFinite(number) && number > 0 ? Math.floor(number) : 0;
+}
+
+export function readLayout(value: unknown): GalleryLayout {
+  return value === "list" ? "list" : "box";
 }
 
 /** Exported only so tests can dispose of the observer on teardown. */
@@ -70,6 +81,8 @@ const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
         <FileGallery
           collectionId={readCollectionId(attrs[COLLECTION_ID_ATTRIBUTE])}
           maxItems={readMaxItems(attrs[MAX_ITEMS_ATTRIBUTE])}
+          layout={readLayout(attrs[LAYOUT_ATTRIBUTE])}
+          filter={typeof attrs[FILTER_ATTRIBUTE] === "string" ? (attrs[FILTER_ATTRIBUTE] as string) : ""}
         />,
       );
     }
