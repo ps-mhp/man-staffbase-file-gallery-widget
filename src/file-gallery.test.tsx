@@ -28,22 +28,20 @@ const file = (overrides: Partial<GalleryFile> = {}): GalleryFile => ({
   thumbnailUrl: "/api/media/secure/external/v2/image/upload/t_preview/69416c647717816dc7fd000c.png",
   bytes: 356701,
   created: null,
+  creator: null,
   ...overrides,
 });
 
 describe("FileGallery", () => {
-  it("asks for a collection when none is configured", () => {
-    const loadFiles = jest.fn();
+  it("loads all files when no collection is set", async () => {
+    const loadFiles = jest.fn().mockResolvedValue([file()]);
     render(<FileGallery collectionId={null} maxItems={0} loadFiles={loadFiles} />);
-    expect(screen.getByText(MESSAGES.missingCollection)).toBeTruthy();
-    expect(loadFiles).not.toHaveBeenCalled();
+    expect(await screen.findByText("Fahrerhaus.png")).toBeTruthy();
+    expect(loadFiles).toHaveBeenCalledWith(null);
   });
 
   it("shows each file as a link that opens it, with preview or type badge", async () => {
-    const loadFiles = jest.fn().mockResolvedValue({
-      files: [file(), file({ id: "69416c7452f71c195ff6a578", fileName: "Bericht.pdf", extension: "pdf", thumbnailUrl: null })],
-      total: 2,
-    });
+    const loadFiles = jest.fn().mockResolvedValue([file(), file({ id: "69416c7452f71c195ff6a578", fileName: "Bericht.pdf", extension: "pdf", thumbnailUrl: null })]);
     render(<FileGallery collectionId={COLLECTION} maxItems={5} loadFiles={loadFiles} />);
 
     const link = (await screen.findByText("Fahrerhaus.png")).closest("a");
@@ -51,7 +49,6 @@ describe("FileGallery", () => {
     expect(link?.getAttribute("target")).toBe("_blank");
     expect(link?.querySelector("img")?.getAttribute("src")).toBe(file().thumbnailUrl);
     expect(screen.getByText("PDF")).toBeTruthy();
-    expect(loadFiles).toHaveBeenCalledWith(COLLECTION, 5, undefined);
   });
 
   it("explains a refused request as missing access", async () => {
@@ -61,31 +58,47 @@ describe("FileGallery", () => {
   });
 
   it("says so when the collection is empty", async () => {
-    const loadFiles = jest.fn().mockResolvedValue({ files: [], total: 0 });
+    const loadFiles = jest.fn().mockResolvedValue([]);
     render(<FileGallery collectionId={COLLECTION} maxItems={0} loadFiles={loadFiles} />);
     expect(await screen.findByText(MESSAGES.empty)).toBeTruthy();
   });
 
   it("marks the layout so the list can show the image left of the details", async () => {
-    const loadFiles = jest.fn().mockResolvedValue({ files: [file()], total: 1 });
+    const loadFiles = jest.fn().mockResolvedValue([file()]);
     render(<FileGallery collectionId={COLLECTION} maxItems={0} layout="list" loadFiles={loadFiles} />);
     await screen.findByText("Fahrerhaus.png");
     expect(screen.getByTestId("file-gallery").className).toContain("man-file-gallery--list");
   });
 
-  it("hands the filter to the loader and names a filter without matches", async () => {
-    const loadFiles = jest.fn().mockResolvedValue({ files: [], total: 0 });
-    render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="pdf$" loadFiles={loadFiles} />);
-    expect(await screen.findByText(MESSAGES.noMatch)).toBeTruthy();
-    const accept = loadFiles.mock.calls[0][2] as (f: GalleryFile) => boolean;
-    expect(accept(file({ fileName: "x.PDF" }))).toBe(true);
-    expect(accept(file({ fileName: "x.png" }))).toBe(false);
+  it("filters and sorts the loaded files without loading again", async () => {
+    const loadFiles = jest.fn().mockResolvedValue([
+      file({ id: "000000000000000000000001", fileName: "alt.pdf", created: "2026-01-01T00:00:00Z" }),
+      file({ id: "000000000000000000000002", fileName: "neu.pdf", created: "2026-03-01T00:00:00Z" }),
+      file({ id: "000000000000000000000003", fileName: "neu.png", created: "2026-04-01T00:00:00Z" }),
+    ]);
+    const { rerender } = render(
+      <FileGallery collectionId={null} maxItems={0} filter="pdf" filterOperator="endsWith" loadFiles={loadFiles} />,
+    );
+    await screen.findByText("neu.pdf");
+    expect(screen.queryByText("neu.png")).toBeNull();
+    const names = (): string[] => screen.getAllByRole("link").map((a) => a.textContent ?? "");
+    expect(names()[0]).toContain("neu.pdf");
+
+    rerender(<FileGallery collectionId={null} maxItems={1} sort="oldest" loadFiles={loadFiles} />);
+    expect(names()).toHaveLength(1);
+    expect(names()[0]).toContain("alt.pdf");
+    expect(loadFiles).toHaveBeenCalledTimes(1);
   });
 
-  it("shows an invalid filter as an error and loads nothing", () => {
-    const loadFiles = jest.fn();
-    render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="(" loadFiles={loadFiles} />);
+  it("names a filter without matches", async () => {
+    const loadFiles = jest.fn().mockResolvedValue([file()]);
+    render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="zzz" loadFiles={loadFiles} />);
+    expect(await screen.findByText(MESSAGES.noMatch)).toBeTruthy();
+  });
+
+  it("shows an invalid filter as an error", () => {
+    const loadFiles = jest.fn().mockReturnValue(new Promise(() => {}));
+    render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="(" filterOperator="regex" loadFiles={loadFiles} />);
     expect(screen.getByRole("alert").textContent).toContain(MESSAGES.badFilter);
-    expect(loadFiles).not.toHaveBeenCalled();
   });
 });

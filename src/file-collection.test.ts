@@ -13,9 +13,13 @@
 
 import {
   CollectionError,
+  FileSelection,
+  GalleryFile,
   collectionCatalogSource,
   fetchCollectionFiles,
+  fetchFiles,
   parseFileFilter,
+  selectFiles,
   toGalleryFile,
 } from "./file-collection";
 
@@ -56,55 +60,86 @@ describe("toGalleryFile", () => {
 });
 
 describe("fetchCollectionFiles", () => {
-  it("follows the cursor until the limit is reached", async () => {
+  it("follows the cursor and returns every file", async () => {
     const fetchImpl = jest
       .fn()
-      .mockResolvedValueOnce(json({ entries: [entry(id(1)), entry(id(2))], cursor: "next", total: 5 }))
-      .mockResolvedValueOnce(json({ entries: [entry(id(3)), entry(id(4))], cursor: "more", total: 5 }));
+      .mockResolvedValueOnce(json({ entries: [entry(id(1)), entry(id(2))], cursor: "next" }))
+      .mockResolvedValueOnce(json({ entries: [entry(id(3))], cursor: "more" }))
+      .mockResolvedValueOnce(json({ entries: [], cursor: "more" }));
 
-    const page = await fetchCollectionFiles(COLLECTION, 3, undefined, fetchImpl);
+    const files = await fetchCollectionFiles(COLLECTION, fetchImpl);
 
-    expect(page.files.map((f) => f.id)).toEqual([id(1), id(2), id(3)]);
-    expect(fetchImpl).toHaveBeenCalledTimes(2);
+    expect(files.map((f) => f.id)).toEqual([id(1), id(2), id(3)]);
     expect(fetchImpl.mock.calls[1][0]).toContain("cursor=next");
-  });
-
-  it("stops on an empty page even when the API still sends a cursor", async () => {
-    const fetchImpl = jest
-      .fn()
-      .mockResolvedValueOnce(json({ entries: [entry(id(1))], cursor: "next" }))
-      .mockResolvedValueOnce(json({ entries: [], cursor: "next" }));
-
-    const page = await fetchCollectionFiles(COLLECTION, 0, undefined, fetchImpl);
-
-    expect(page.files).toHaveLength(1);
-    expect(fetchImpl).toHaveBeenCalledTimes(2);
-  });
-
-  it("applies the filter before the limit, so matches behind other files are found", async () => {
-    const fetchImpl = jest.fn().mockResolvedValueOnce(
-      json({
-        entries: [entry(id(1), { fileName: "a.png" }), entry(id(2), { fileName: "b.pdf" }), entry(id(3), { fileName: "c.pdf" })],
-      }),
-    );
-
-    const page = await fetchCollectionFiles(COLLECTION, 1, (f) => f.fileName.endsWith(".pdf"), fetchImpl);
-
-    expect(page.files.map((f) => f.id)).toEqual([id(2)]);
   });
 
   it("reports the HTTP status of a refused request", async () => {
     const fetchImpl = jest.fn().mockResolvedValue(new Response("", { status: 403 }));
-    await expect(fetchCollectionFiles(COLLECTION, 0, undefined, fetchImpl)).rejects.toMatchObject({
-      name: "CollectionError",
-      status: 403,
-    });
+    await expect(fetchCollectionFiles(COLLECTION, fetchImpl)).rejects.toMatchObject({ name: "CollectionError", status: 403 });
   });
 
   it("refuses an id that is not a Staffbase id without asking the API", async () => {
     const fetchImpl = jest.fn();
-    await expect(fetchCollectionFiles("../users", 0, undefined, fetchImpl)).rejects.toBeInstanceOf(CollectionError);
+    await expect(fetchCollectionFiles("../users", fetchImpl)).rejects.toBeInstanceOf(CollectionError);
     expect(fetchImpl).not.toHaveBeenCalled();
+  });
+});
+
+describe("fetchFiles without a collection", () => {
+  it("merges all visible collections and lists a shared file once", async () => {
+    const fetchImpl = jest.fn(async (url: string) => {
+      if (url.includes("/entries")) {
+        return json({ entries: url.includes(id(10)) ? [entry(id(1)), entry(id(2))] : [entry(id(2)), entry(id(3))] });
+      }
+      return json({ entries: [{ id: id(10) }, { id: id(11) }] });
+    });
+
+    const files = await fetchFiles(null, fetchImpl as unknown as typeof fetch);
+
+    expect(files.map((f) => f.id).sort()).toEqual([id(1), id(2), id(3)]);
+  });
+});
+
+describe("selectFiles", () => {
+  const f = (n: number, overrides: Record<string, unknown> = {}): GalleryFile =>
+    toGalleryFile(entry(id(n), { fileName: `f${n}.pdf`, fileExtension: "pdf", ...overrides }))!;
+  const base = { sort: "newest", field: "fileName", operator: "contains", value: "", limit: 0 } as const;
+  const run = (files: GalleryFile[], over: Partial<FileSelection> = {}): string[] => {
+    const selection = { ...base, ...over };
+    return selectFiles(files, selection, parseFileFilter(selection)).map((x) => x.fileName);
+  };
+
+  const files = [
+    f(1, { created: "2026-01-01T00:00:00Z", original: { size: 300, url: "/api/media/a" } }),
+    f(2, { created: "2026-03-01T00:00:00Z", original: { size: 100, url: "/api/media/b" } }),
+    f(3, { created: "2026-02-01T00:00:00Z", original: { size: 200, url: "/api/media/c" }, fileName: "Bericht.docx", fileExtension: "docx", createdBy: { firstName: "Ada", lastName: "Lovelace" } }),
+  ];
+
+  it("sorts newest and oldest first", () => {
+    expect(run(files, { sort: "newest" })).toEqual(["f2.pdf", "Bericht.docx", "f1.pdf"]);
+    expect(run(files, { sort: "oldest" })).toEqual(["f1.pdf", "Bericht.docx", "f2.pdf"]);
+  });
+
+  it("sorts by size", () => {
+    expect(run(files, { sort: "size-desc" })).toEqual(["f1.pdf", "Bericht.docx", "f2.pdf"]);
+  });
+
+  it("limits after sorting, so '2 newest' are the newest matches", () => {
+    expect(run(files, { sort: "newest", limit: 2 })).toEqual(["f2.pdf", "Bericht.docx"]);
+    expect(run(files, { sort: "newest", field: "extension", operator: "equals", value: "pdf", limit: 1 })).toEqual(["f2.pdf"]);
+  });
+
+  it("supports contains, notContains, startsWith, endsWith and equals case-insensitively", () => {
+    expect(run(files, { operator: "contains", value: "BERICHT" })).toEqual(["Bericht.docx"]);
+    expect(run(files, { operator: "notContains", value: "bericht", sort: "oldest" })).toEqual(["f1.pdf", "f2.pdf"]);
+    expect(run(files, { operator: "startsWith", value: "f1" })).toEqual(["f1.pdf"]);
+    expect(run(files, { operator: "endsWith", value: ".DOCX" })).toEqual(["Bericht.docx"]);
+    expect(run(files, { field: "extension", operator: "equals", value: "docx" })).toEqual(["Bericht.docx"]);
+  });
+
+  it("filters by creator and by regular expression", () => {
+    expect(run(files, { field: "creator", operator: "contains", value: "lovelace" })).toEqual(["Bericht.docx"]);
+    expect(run(files, { operator: "regex", value: "^f\\d\\.pdf$", sort: "oldest" })).toEqual(["f1.pdf", "f2.pdf"]);
   });
 });
 
@@ -128,13 +163,11 @@ describe("collectionCatalogSource", () => {
 });
 
 describe("parseFileFilter", () => {
-  it("treats an empty pattern as no filter and matches case-insensitively", () => {
-    expect(parseFileFilter("  ")).toBeNull();
-    const filter = parseFileFilter("\\.pdf$");
-    expect(filter && "regex" in filter && filter.regex.test("Bericht.PDF")).toBe(true);
+  it("treats an empty value as no filter", () => {
+    expect(parseFileFilter({ field: "fileName", operator: "contains", value: "  " })).toBeNull();
   });
 
   it("reports an invalid expression instead of throwing", () => {
-    expect(parseFileFilter("(")).toEqual({ error: expect.any(String) });
+    expect(parseFileFilter({ field: "fileName", operator: "regex", value: "(" })).toEqual({ error: expect.any(String) });
   });
 });

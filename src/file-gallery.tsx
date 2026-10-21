@@ -16,17 +16,19 @@ import React from "react";
 import { useHotStyle } from "@shared/hot-style";
 import {
   CollectionError,
-  CollectionPage,
+  FileSort,
+  FilterField,
+  FilterOperator,
   GalleryFile,
-  fetchCollectionFiles,
+  fetchFiles,
   parseFileFilter,
+  selectFiles,
 } from "./file-collection";
 import galleryCss from "./styles/file-gallery.scss";
 
 export const MESSAGES = {
-  missingCollection: "Keine Collection gewählt. Bitte in den Widget-Einstellungen eine Collection auswählen.",
   loading: "Dateien werden geladen …",
-  empty: "Diese Collection enthält keine Dateien.",
+  empty: "Keine Dateien gefunden.",
   forbidden: "Sie haben keinen Zugriff auf diese Dateien.",
   noMatch: "Keine Datei passt zum Filter.",
   badFilter: "Der Filter ist kein gültiger regulärer Ausdruck",
@@ -35,19 +37,22 @@ export const MESSAGES = {
 
 type State =
   | { status: "loading" }
-  | { status: "ready"; files: GalleryFile[] }
   | { status: "error"; message: string };
 
+export type GalleryLayout = "box" | "list";
+
 export interface FileGalleryProps {
+  /** `null` = die Dateien aller sichtbaren Collections. */
   collectionId: string | null;
   maxItems: number;
   layout?: GalleryLayout;
-  /** Regulärer Ausdruck gegen den Dateinamen; leer = alle Dateien. */
+  sort?: FileSort;
+  filterField?: FilterField;
+  filterOperator?: FilterOperator;
+  /** Wert der Filter-Bedingung; leer = kein Filter. */
   filter?: string;
-  loadFiles?: (collectionId: string, limit: number, accept?: (file: GalleryFile) => boolean) => Promise<CollectionPage>;
+  loadFiles?: (collectionId: string | null) => Promise<GalleryFile[]>;
 }
-
-export type GalleryLayout = "box" | "list";
 
 export function formatBytes(bytes: number | null): string {
   if (bytes === null) return "";
@@ -81,28 +86,29 @@ function FileTile({ file }: { file: GalleryFile }): React.JSX.Element {
   );
 }
 
-/** Die Dateien einer Collection als Kachelraster; jede Kachel öffnet die Datei. */
+/** Die Dateien einer Collection (oder aller) als Kartenraster; jede Karte öffnet die Datei. */
 export function FileGallery({
   collectionId,
   maxItems,
   layout = "box",
+  sort = "newest",
+  filterField = "fileName",
+  filterOperator = "contains",
   filter = "",
-  loadFiles = fetchCollectionFiles,
+  loadFiles = fetchFiles,
 }: FileGalleryProps): React.JSX.Element {
   const liveCss = useHotStyle(galleryCss, "file-gallery-widget", "styles/file-gallery.scss");
   const [state, setState] = React.useState<State>({ status: "loading" });
-  const parsed = React.useMemo(() => parseFileFilter(filter), [filter]);
-  const badFilter = parsed !== null && "error" in parsed ? parsed.error : null;
-  const regex = parsed !== null && "regex" in parsed ? parsed.regex : null;
+  const [loaded, setLoaded] = React.useState<GalleryFile[] | null>(null);
 
+  // Geladen wird nur bei geänderter Collection; Filter und Reihenfolge arbeiten auf dem Geladenen.
   React.useEffect(() => {
-    if (collectionId === null || badFilter !== null) return;
-    // Eine geänderte Auswahl macht die laufende Antwort zur falschen.
     let current = true;
     setState({ status: "loading" });
-    loadFiles(collectionId, maxItems, regex === null ? undefined : (file) => regex.test(file.fileName))
-      .then(({ files }) => {
-        if (current) setState({ status: "ready", files });
+    setLoaded(null);
+    loadFiles(collectionId)
+      .then((files) => {
+        if (current) setLoaded(files);
       })
       .catch((error: unknown) => {
         if (!current) return;
@@ -116,31 +122,43 @@ export function FileGallery({
     return () => {
       current = false;
     };
-  }, [collectionId, maxItems, regex, badFilter, loadFiles]);
+  }, [collectionId, loadFiles]);
+
+  const parsed = React.useMemo(
+    () => parseFileFilter({ field: filterField, operator: filterOperator, value: filter }),
+    [filterField, filterOperator, filter],
+  );
+  const badFilter = parsed !== null && "error" in parsed ? parsed.error : null;
+  const hasFilter = parsed !== null && "test" in parsed;
+  const files = React.useMemo(
+    () =>
+      loaded === null || badFilter !== null
+        ? null
+        : selectFiles(loaded, { sort, field: filterField, operator: filterOperator, value: filter, limit: maxItems }, parsed),
+    [loaded, badFilter, sort, filterField, filterOperator, filter, maxItems, parsed],
+  );
 
   let body: React.JSX.Element;
-  if (collectionId === null) {
-    body = <p className="man-file-gallery__status">{MESSAGES.missingCollection}</p>;
-  } else if (badFilter !== null) {
+  if (badFilter !== null) {
     body = (
       <p className="man-file-gallery__status man-file-gallery__status--error" role="alert">
         {MESSAGES.badFilter}: {badFilter}
       </p>
     );
-  } else if (state.status === "loading") {
-    body = <p className="man-file-gallery__status">{MESSAGES.loading}</p>;
   } else if (state.status === "error") {
     body = (
       <p className="man-file-gallery__status man-file-gallery__status--error" role="alert">
         {state.message}
       </p>
     );
-  } else if (state.files.length === 0) {
-    body = <p className="man-file-gallery__status">{regex === null ? MESSAGES.empty : MESSAGES.noMatch}</p>;
+  } else if (files === null) {
+    body = <p className="man-file-gallery__status">{MESSAGES.loading}</p>;
+  } else if (files.length === 0) {
+    body = <p className="man-file-gallery__status">{hasFilter ? MESSAGES.noMatch : MESSAGES.empty}</p>;
   } else {
     body = (
       <div className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
-        {state.files.map((file) => (
+        {files.map((file) => (
           <FileTile key={file.id} file={file} />
         ))}
       </div>

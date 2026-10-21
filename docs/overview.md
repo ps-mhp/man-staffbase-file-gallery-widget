@@ -1,7 +1,9 @@
 # Dateigalerie
 
-Die Dateigalerie zeigt alle Dateien einer Collection aus dem Datei-Manager
-(Studio → Dateien) auf einer Seite an. Wer Dateien in die Collection legt
+Die Dateigalerie zeigt Dateien aus dem Datei-Manager (Studio → Dateien) auf
+einer Seite an: die einer Collection oder, ohne Auswahl, die aller Collections.
+Dateien lassen sich filtern, sortieren und auf eine Anzahl begrenzen, z. B.
+als „die 5 neuesten PDFs“. Wer Dateien in die Collection legt
 oder aus ihr entfernt, ändert damit auch die Galerie — die Seite selbst muss
 dafür nicht bearbeitet werden.
 

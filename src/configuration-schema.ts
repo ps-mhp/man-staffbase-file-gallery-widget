@@ -23,6 +23,9 @@ export const COLLECTION_ID_ATTRIBUTE = "collection-id";
 export const MAX_ITEMS_ATTRIBUTE = "max-items";
 export const LAYOUT_ATTRIBUTE = "layout";
 export const FILTER_ATTRIBUTE = "filter";
+export const FILTER_FIELD_ATTRIBUTE = "filter-field";
+export const FILTER_OPERATOR_ATTRIBUTE = "filter-operator";
+export const SORT_ATTRIBUTE = "sort";
 
 /**
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/
@@ -31,7 +34,47 @@ export const configurationSchema: JSONSchema7 = {
   properties: {
     [COLLECTION_ID_ATTRIBUTE]: {
       type: "string",
-      title: "Collection",
+      title: "Collection (optional)",
+    },
+    [SORT_ATTRIBUTE]: {
+      type: "string",
+      title: "Reihenfolge",
+      default: "newest",
+      oneOf: [
+        { const: "newest", title: "Neueste zuerst" },
+        { const: "oldest", title: "Älteste zuerst" },
+        { const: "name-asc", title: "Name A–Z" },
+        { const: "name-desc", title: "Name Z–A" },
+        { const: "size-desc", title: "Größte zuerst" },
+        { const: "size-asc", title: "Kleinste zuerst" },
+      ],
+    },
+    [FILTER_FIELD_ATTRIBUTE]: {
+      type: "string",
+      title: "Filter: Feld",
+      default: "fileName",
+      oneOf: [
+        { const: "fileName", title: "Dateiname" },
+        { const: "extension", title: "Dateiendung (z. B. pdf)" },
+        { const: "creator", title: "Hochgeladen von" },
+      ],
+    },
+    [FILTER_OPERATOR_ATTRIBUTE]: {
+      type: "string",
+      title: "Filter: Bedingung",
+      default: "contains",
+      oneOf: [
+        { const: "contains", title: "Enthält" },
+        { const: "notContains", title: "Enthält nicht" },
+        { const: "startsWith", title: "Beginnt mit" },
+        { const: "endsWith", title: "Endet mit" },
+        { const: "equals", title: "Ist gleich" },
+        { const: "regex", title: "Passt auf regulären Ausdruck" },
+      ],
+    },
+    [FILTER_ATTRIBUTE]: {
+      type: "string",
+      title: "Filter: Wert",
     },
     [LAYOUT_ATTRIBUTE]: {
       type: "string",
@@ -41,10 +84,6 @@ export const configurationSchema: JSONSchema7 = {
         { const: "box", title: "Box: Bild oben, Details darunter" },
         { const: "list", title: "Liste: Bild links, Details rechts" },
       ],
-    },
-    [FILTER_ATTRIBUTE]: {
-      type: "string",
-      title: "Filter (regulärer Ausdruck)",
     },
     [MAX_ITEMS_ATTRIBUTE]: {
       type: "number",
@@ -61,15 +100,15 @@ export const configurationSchema: JSONSchema7 = {
 export const uiSchema: UiSchema = {
   [COLLECTION_ID_ATTRIBUTE]: {
     "ui:help":
-      "Die Collection aus dem Datei-Manager wählen, deren Dateien angezeigt werden. Fehlt sie in der Liste, " +
-      "„Andere Collection-ID eingeben …“ wählen und die 24-stellige ID eintragen.",
+      "Leer lassen, um die Dateien aller Collections zu zeigen, die Lesende sehen dürfen (Dateien ohne Collection fehlen dann). " +
+      "Fehlt die gewünschte Collection in der Liste, „Andere Collection-ID eingeben …“ wählen und die 24-stellige ID eintragen.",
   },
   [FILTER_ATTRIBUTE]: {
     "ui:help":
-      "Zeigt nur Dateien, deren Dateiname zum regulären Ausdruck passt, ohne Beachtung der Groß-/Kleinschreibung. " +
-      "Beispiele: „\\.pdf$“ nur PDFs, „^2026“ Namen mit 2026 am Anfang, „Bericht|Protokoll“ eins von beiden. Leer lassen für alle Dateien.",
+      "Der Wert zur Bedingung, ohne Beachtung der Groß-/Kleinschreibung. Leer lassen für keinen Filter. " +
+      "Bei „Passt auf regulären Ausdruck“ z. B. „^2026-\\d\\d_PIM_“ oder „Bericht|Protokoll“.",
   },
   [MAX_ITEMS_ATTRIBUTE]: {
-    "ui:help": "0 zeigt alle Dateien der Collection.",
+    "ui:help": "Gilt nach Filter und Reihenfolge: „Neueste zuerst“ mit 5 zeigt die fünf neuesten Treffer. 0 zeigt alle.",
   },
 };
