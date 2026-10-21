@@ -18,4 +18,12 @@ Odpowiedź: Kolekcja jest pusta. Włóż pliki do menedżera plików.
 
 Odpowiedź: Żądanie nie powiodło się, np. dlatego, że kolekcja została usunięta
 lub połączenie zostało utracone. strona ponownego ładowania; wiadomość, że
-Ponownie wybierz Kolekcję w ustawieniach.
+Ponownie wybierz Kolekcję w ustawieniach. 
+
+**Pytanie:** Widżet pokazuje "Żaden plik nie pasuje do filtra." 
+
+Odpowiedź: Żadna nazwa pliku w kolekcji nie zgadza się z wyrażeniem w polu **Filtr (wyrażenie regularne)**. Sprawdź wyrażenie lub wyczyść pole. 
+
+**Pytanie:** Widżet pokazuje "Filtr nie jest poprawnym wyrażeniem regularnym: ..." 
+
+Odpowiedź: Wyrażenie zawiera błąd składniowy, na przykład niezamknięty nawias. Popraw lub wyczyść pole.

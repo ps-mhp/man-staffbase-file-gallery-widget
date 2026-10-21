@@ -18,4 +18,12 @@ Respuesta: La colección está vacía. Pon los archivos en el gestor de archivos
 
 Respuesta: La solicitud falló, por ejemplo, porque la colección fue eliminada
 o se perdió la conexión. recargar página; el mensaje que
-Vuelve a seleccionar Colección en los ajustes.
+Vuelve a seleccionar Colección en los ajustes. 
+
+**Pregunta:** El widget muestra "Ningún archivo coincide con el filtro." 
+
+Respuesta: Ningún nombre de archivo en la colección coincide con la expresión en el campo **Filter (expresión regular)**. Comprueba la expresión o borra el campo. 
+
+**Pregunta:** El widget muestra "El filtro no es una expresión regular válida: ..." 
+
+Respuesta: La expresión contiene un error de sintaxis, como un paréntesis no cerrado. Corrija o borra el campo.

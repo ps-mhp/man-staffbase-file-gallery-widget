@@ -18,4 +18,12 @@ Réponse : La collection est vide. Mettez les fichiers dans le gestionnaire de f
 
 Réponse : La requête a échoué, par exemple parce que la collection a été supprimée
 ou la connexion a été perdue. recharger la page ; le message que
-Resélectionnez Collection dans les paramètres.
+Resélectionnez Collection dans les paramètres. 
+
+**Question :** Le widget affiche « Aucun fichier ne correspond au filtre. » 
+
+Réponse : Aucun nom de fichier dans la collection ne correspond à l’expression du champ **Filter (expression régulière)**. Vérifiez l’expression ou effacez le champ. 
+
+**Question :** Le widget indique « Le filtre n’est pas une expression régulière valide : ... » 
+
+Réponse : L’expression contient une erreur de syntaxe, telle qu’une parenthèse non fermée. Corrigez ou effacez le champ.

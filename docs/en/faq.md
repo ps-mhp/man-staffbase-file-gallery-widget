@@ -18,4 +18,12 @@ Answer: The collection is empty. Put files in the file manager.
 
 Answer: The request failed, e.g. because the collection was deleted
 or the connection was lost. reload page; the message that
-Reselect Collection in the settings.
+Reselect Collection in the settings. 
+
+**Question:** The widget shows "No file matches the filter." 
+
+Answer: No file name in the collection matches the expression in the **Filter (regular expression)** field. Check expression or clear the field. 
+
+**Question:** The widget shows "The filter is not a valid regular expression: ..." 
+
+Answer: The expression contains a syntax error, such as an unclosed parenthesis. Correct or clear the field.
