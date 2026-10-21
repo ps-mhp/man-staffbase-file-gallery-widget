@@ -1,18 +1,13 @@
 # FAQ
 
-**Question:** The widget shows "No collection selected. Please select a collection in the widget settings." 
-
-Answer: Nothing is selected in the **Collection** field yet. Widget Settings
-and select a collection. 
-
 **Question:** The widget shows "You do not have access to these files." 
 
 Answer: The person logged in is not allowed to read the collection. In the
 File Manager check the access rights of the collection. 
 
-**Question:** The widget shows "This collection does not contain any files." 
+**Question:** The widget shows "No files found." 
 
-Answer: The collection is empty. Put files in the file manager. 
+Answer: The collection (or, without selection, any visible collection) does not contain any files. Place files in a collection in the file manager. Files without a collection are not shown in the widget. 
 
 **Question:** The widget shows "Failed to load files: ..." 
 
@@ -22,7 +17,7 @@ Reselect Collection in the settings.
 
 **Question:** The widget shows "No file matches the filter." 
 
-Answer: No file name in the collection matches the expression in the **Filter (regular expression)** field. Check expression or clear the field. 
+Answer: No file matches **Filter: Field**, **Condition**, and **Value**. Check filter or clear the value. 
 
 **Question:** The widget shows "The filter is not a valid regular expression: ..." 
 

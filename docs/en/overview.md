@@ -1,7 +1,9 @@
 # File gallery
 
-The file gallery shows all files of a collection from the file manager
-(Studio → Files) on a page. If you add files to the collection
+The File Gallery shows files from the File Manager (Studio → Files)
+of a page: that of a collection or, without selection, that of all collections. 
+Files can be filtered, sorted, and limited to a number, e.g. 
+as "the 5 most recent PDFs". If you put files in the collection,
 or removed from it, this also changes the gallery — the page itself must be
 are not processed for this. 
 

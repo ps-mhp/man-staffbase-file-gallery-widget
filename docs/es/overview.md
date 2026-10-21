@@ -1,7 +1,9 @@
 # Galería de archivos
 
-La galería de archivos muestra todos los archivos de una colección desde el gestor de archivos
-(Studio → Archivos) en una página. Si añades archivos a la colección
+La Galería de Archivos muestra archivos del Administrador de Archivos (Studio → Archivos)
+de una página: la de una colección o, sin selección, la de todas las colecciones. 
+Los archivos pueden filtrarse, ordenarse y limitarse a un número, por ejemplo, 
+como "los 5 PDFs más recientes". Si pones archivos en la colección,
 o si se elimina de ella, esto también cambia la galería — la página en sí debe ser
 no se procesan para esto. 
 

@@ -1,7 +1,9 @@
 # Galerie de fichiers
 
-La galerie de fichiers affiche tous les fichiers d’une collection depuis le gestionnaire de fichiers
-(Studio → Files) sur une page. Si vous ajoutez des fichiers à la collection
+La galerie de fichiers affiche les fichiers du gestionnaire de fichiers (Studio → Files)
+d’une page : celle d’une collection ou, sans sélection, celle de toutes les collections. 
+Les fichiers peuvent être filtrés, triés et limités à un certain nombre, par exemple 
+comme « les 5 PDF les plus récents ». Si vous mettez des fichiers dans la collection,
 ou en retirer, cela modifie aussi la galerie — la page elle-même doit être
 ne sont pas traités pour cela. 
 

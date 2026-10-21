@@ -1,18 +1,13 @@
 # FAQ
 
-**Pytanie:** Widżet pokazuje "Nie wybrana kolekcja. Proszę wybrać kolekcję w ustawieniach widżetu." 
-
-Odpowiedź: Nic nie zostało jeszcze zaznaczone w polu **Kolekcja**. Ustawienia widżetu
-i wybierz kolekcję. 
-
 **Pytanie:** Wiżet pokazuje "Nie masz dostępu do tych plików." 
 
 Odpowiedź: Osoba zalogowana nie może czytać kolekcji. W
 Menedżer plików sprawdza prawa dostępu do kolekcji. 
 
-**Pytanie:** Widżet pokazuje "Ta kolekcja nie zawiera żadnych plików." 
+**Pytanie:** Widżet pokazuje "Brak plików znalezionych." 
 
-Odpowiedź: Kolekcja jest pusta. Włóż pliki do menedżera plików. 
+Odpowiedź: Kolekcja (lub, bez zaznaczenia, dowolna widoczna kolekcja) nie zawiera żadnych plików. Umieść pliki w kolekcji w menedżerze plików. Pliki bez kolekcji nie są wyświetlane w widżecie. 
 
 **Pytanie:** Widżet pokazuje "Nie udało się załadować plików: ..." 
 
@@ -22,7 +17,7 @@ Ponownie wybierz Kolekcję w ustawieniach.
 
 **Pytanie:** Widżet pokazuje "Żaden plik nie pasuje do filtra." 
 
-Odpowiedź: Żadna nazwa pliku w kolekcji nie zgadza się z wyrażeniem w polu **Filtr (wyrażenie regularne)**. Sprawdź wyrażenie lub wyczyść pole. 
+Odpowiedź: Żaden plik nie pasuje do **Filtr: Pole**, **Warunk** i **Wartość**. Sprawdź filtr lub wyczyść wartość. 
 
 **Pytanie:** Widżet pokazuje "Filtr nie jest poprawnym wyrażeniem regularnym: ..." 
 

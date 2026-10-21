@@ -1,7 +1,9 @@
 # Galeria plików
 
-Galeria plików pokazuje wszystkie pliki kolekcji z menedżera plików
-(Studio → Files) na stronie. Jeśli dodasz pliki do kolekcji
+Galeria plików pokazuje pliki z Menedżera plików (Studio → Files)
+strony: zbioru lub, bez selekcji, wszystkich zbiorów. 
+Pliki można filtrować, sortować i ograniczać do numeru, np. 
+jako "5 najnowszych PDF-ów". Jeśli dodasz pliki do kolekcji,
 lub usunięty z niej, to również zmienia galerię — sama strona musi być
 nie są w tym celu przetwarzani. 
 

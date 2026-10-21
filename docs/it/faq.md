@@ -1,18 +1,13 @@
 # FAQ
 
-**Domanda:** Il widget mostra "Nessuna collezione selezionata. Per favore seleziona una collezione nelle impostazioni del widget." 
-
-Risposta: Non è ancora selezionato nulla nel campo **Collezione**. Impostazioni widget
-e seleziona una collezione. 
-
 **Domanda:** Il widget mostra "Non hai accesso a questi file." 
 
 Risposta: La persona loggata non può leggere la collezione. Nel
 Gestore file, controlla i diritti di accesso della collezione. 
 
-**Domanda:** Il widget mostra "Questa collezione non contiene alcun file." 
+**Domanda:** Il widget mostra "Nessun file trovato." 
 
-Risposta: La collezione è vuota. Inserisci i file nel gestore file. 
+Risposta: La collezione (o, senza selezione, qualsiasi collezione visibile) non contiene file. Inserire i file in una collezione nel gestore file. I file senza una collezione non sono mostrati nel widget. 
 
 **Domanda:** Il widget mostra "Non inserito nel caricare file: ..." 
 
@@ -22,7 +17,7 @@ Riseleziona Collezione nelle impostazioni.
 
 **Domanda:** Il widget mostra "Nessun file corrisponde al filtro." 
 
-Risposta: Nessun nome file nella collezione corrisponde all'espressione nel campo **Filter (espressione regolare)**. Controlla l'espressione o cancella il campo. 
+Risposta: Nessun file corrisponde a **Filter: Field**, **Condition** e **Value**. Controlla il filtro o cancella il valore. 
 
 **Domanda:** Il widget mostra "Il filtro non è un'espressione regolare valida: ..." 
 

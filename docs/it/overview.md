@@ -1,7 +1,9 @@
 # Galleria di archivi
 
-La galleria dei file mostra tutti i file di una collezione dal file manager
-(Studio → File) su una pagina. Se aggiungi file alla collezione
+La Galleria File mostra i file dal File Manager (Studio → Files)
+di una pagina: quella di una raccolta o, senza selezione, quella di tutte le raccolte. 
+I file possono essere filtrati, ordinati e limitati a un numero, ad esempio 
+come "i 5 PDF più recenti". Se inserisci file nella collezione,
 oppure rimosso, questo cambia anche la galleria — la pagina stessa deve essere
 non vengono processati per questo. 
 

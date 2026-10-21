@@ -1,7 +1,9 @@
 # Bestandsgalerij
 
-De bestandsgalerij toont alle bestanden van een collectie vanuit de bestandsbeheerder
-(Studio → Bestanden) op een pagina. Als je bestanden aan de collectie toevoegt
+De Bestandsgalerij toont bestanden uit de Bestandsbeheerder (Studio → Files)
+van een pagina: die van een collectie of, zonder selectie, die van alle collecties. 
+Bestanden kunnen worden gefilterd, gesorteerd en beperkt tot een nummer, bijvoorbeeld. 
+als "de 5 meest recente PDF's". Als je bestanden in de collectie zet,
 of verwijderd, verandert dit ook de galerij — de pagina zelf moet
 worden hiervoor niet verwerkt. 
 

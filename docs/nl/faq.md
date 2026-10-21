@@ -1,18 +1,13 @@
 # FAQ
 
-**Vraag:** De widget toont "Geen collectie geselecteerd. Selecteer alstublieft een collectie in de widgetinstellingen." 
-
-Antwoord: Er is nog niets geselecteerd in het **Collectie**-veld. Widget-instellingen
-en selecteer een collectie. 
-
 **Vraag:** De widget toont "Je hebt geen toegang tot deze bestanden." 
 
 Antwoord: De ingelogde persoon mag de collectie niet lezen. In de
 Controleer de toegangsrechten van de collectie. 
 
-**Vraag:** De widget toont "Deze collectie bevat geen bestanden." 
+**Vraag:** De widget toont "Geen bestanden gevonden." 
 
-Antwoord: De collectie is leeg. Plaats bestanden in de bestandsbeheerder. 
+Antwoord: De collectie (of, zonder selectie, een zichtbare collectie) bevat geen bestanden. Plaats bestanden in een collectie in de bestandsbeheerder. Bestanden zonder collectie worden niet weergegeven in de widget. 
 
 **Vraag:** De widget toont "Bestanden niet geladen: ..." 
 
@@ -22,7 +17,7 @@ Selecteer Collectie opnieuw in de instellingen.
 
 **Vraag:** De widget toont "Geen bestand komt overeen met het filter." 
 
-Antwoord: Geen enkele bestandsnaam in de collectie komt overeen met de expressie in het **Filter (reguliere expressie)**-veld. Controleer expressie of maak het veld leeg. 
+Antwoord: Geen bestand komt overeen met **Filter: Veld**, **Conditie** en **Waarde**. Controleer het filter of maak de waarde leeg. 
 
 **Vraag:** De widget toont "Het filter is geen geldige reguliere expressie: ..." 
 
