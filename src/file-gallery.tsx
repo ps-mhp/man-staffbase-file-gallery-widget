@@ -39,6 +39,28 @@ type State =
   | { status: "loading" }
   | { status: "error"; message: string };
 
+/** So viele Karten werden zunächst gerendert; weitere folgen beim Scrollen. */
+export const PAGE_SIZE = 24;
+
+/** `true`, sobald das Element im sichtbaren Bereich ist (eingeklappte Bereiche zählen nicht). Ohne IntersectionObserver sofort `true`. */
+function useInView(ref: React.RefObject<HTMLElement | null>, active: boolean): boolean {
+  const supported = typeof IntersectionObserver !== "undefined";
+  const [seen, setSeen] = React.useState(!supported);
+  React.useEffect(() => {
+    const element = ref.current;
+    if (seen || !active || element === null) return undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) setSeen(true);
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [ref, seen, active]);
+  return seen;
+}
+
 export type GalleryLayout = "box" | "list";
 
 export interface FileGalleryProps {
@@ -100,9 +122,14 @@ export function FileGallery({
   const liveCss = useHotStyle(galleryCss, "file-gallery-widget", "styles/file-gallery.scss");
   const [state, setState] = React.useState<State>({ status: "loading" });
   const [loaded, setLoaded] = React.useState<GalleryFile[] | null>(null);
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  const moreRef = React.useRef<HTMLDivElement>(null);
+  const inView = useInView(rootRef, true);
+  const [shown, setShown] = React.useState(PAGE_SIZE);
 
-  // Geladen wird nur bei geänderter Collection; Filter und Reihenfolge arbeiten auf dem Geladenen.
+  // Geladen wird erst, wenn das Widget sichtbar ist, und nur bei geänderter Collection; Filter und Reihenfolge arbeiten auf dem Geladenen.
   React.useEffect(() => {
+    if (!inView) return undefined;
     let current = true;
     setState({ status: "loading" });
     setLoaded(null);
@@ -122,7 +149,7 @@ export function FileGallery({
     return () => {
       current = false;
     };
-  }, [collectionId, loadFiles]);
+  }, [inView, collectionId, loadFiles]);
 
   const parsed = React.useMemo(
     () => parseFileFilter({ field: filterField, operator: filterOperator, value: filter }),
@@ -137,6 +164,22 @@ export function FileGallery({
         : selectFiles(loaded, { sort, field: filterField, operator: filterOperator, value: filter, limit: maxItems }, parsed),
     [loaded, badFilter, sort, filterField, filterOperator, filter, maxItems, parsed],
   );
+
+  React.useEffect(() => setShown(PAGE_SIZE), [files]);
+  const hasMore = files !== null && files.length > shown;
+  // Ein neuer Observer meldet den aktuellen Zustand sofort; so wird nachgeladen, bis der Platz gefüllt ist.
+  React.useEffect(() => {
+    const element = moreRef.current;
+    if (!hasMore || element === null || typeof IntersectionObserver === "undefined") return undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) setShown((count) => count + PAGE_SIZE);
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [hasMore, shown]);
 
   let body: React.JSX.Element;
   if (badFilter !== null) {
@@ -157,16 +200,19 @@ export function FileGallery({
     body = <p className="man-file-gallery__status">{hasFilter ? MESSAGES.noMatch : MESSAGES.empty}</p>;
   } else {
     body = (
-      <div className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
-        {files.map((file) => (
-          <FileTile key={file.id} file={file} />
-        ))}
-      </div>
+      <>
+        <div className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
+          {files.slice(0, shown).map((file) => (
+            <FileTile key={file.id} file={file} />
+          ))}
+        </div>
+        {hasMore && <div ref={moreRef} className="man-file-gallery__more" aria-hidden="true" />}
+      </>
     );
   }
 
   return (
-    <div className={`man-file-gallery man-file-gallery--${layout}`} data-testid="file-gallery">
+    <div ref={rootRef} className={`man-file-gallery man-file-gallery--${layout}`} data-testid="file-gallery">
       <style>{liveCss}</style>
       {body}
     </div>

@@ -12,10 +12,10 @@
  */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 
 import { CollectionError, GalleryFile } from "./file-collection";
-import { FileGallery, MESSAGES } from "./file-gallery";
+import { FileGallery, MESSAGES, PAGE_SIZE } from "./file-gallery";
 
 const COLLECTION = "699465f50cd34b34daa5c188";
 
@@ -100,5 +100,43 @@ describe("FileGallery", () => {
     const loadFiles = jest.fn().mockReturnValue(new Promise(() => {}));
     render(<FileGallery collectionId={COLLECTION} maxItems={0} filter="(" filterOperator="regex" loadFiles={loadFiles} />);
     expect(screen.getByRole("alert").textContent).toContain(MESSAGES.badFilter);
+  });
+
+  describe("lazy loading", () => {
+    let callbacks: Array<(entries: Array<{ isIntersecting: boolean }>) => void>;
+    beforeEach(() => {
+      callbacks = [];
+      (globalThis as unknown as Record<string, unknown>).IntersectionObserver = class {
+        constructor(cb: (entries: Array<{ isIntersecting: boolean }>) => void) {
+          callbacks.push(cb);
+        }
+        observe() {}
+        disconnect() {}
+      };
+    });
+    afterEach(() => {
+      delete (globalThis as unknown as Record<string, unknown>).IntersectionObserver;
+    });
+
+    it("loads only once the widget becomes visible", async () => {
+      const loadFiles = jest.fn().mockResolvedValue([file()]);
+      render(<FileGallery collectionId={COLLECTION} maxItems={0} loadFiles={loadFiles} />);
+      expect(loadFiles).not.toHaveBeenCalled();
+      act(() => callbacks[0]([{ isIntersecting: true }]));
+      expect(await screen.findByText("Fahrerhaus.png")).toBeTruthy();
+      expect(loadFiles).toHaveBeenCalledTimes(1);
+    });
+
+    it("renders further cards only when the end of the list is reached", async () => {
+      const many = Array.from({ length: PAGE_SIZE + 5 }, (_, i) =>
+        file({ id: `69416c647717816dc7fd${String(i).padStart(4, "0")}`, fileName: `f${i}.png` }),
+      );
+      render(<FileGallery collectionId={COLLECTION} maxItems={0} sort="name-asc" loadFiles={jest.fn().mockResolvedValue(many)} />);
+      act(() => callbacks[0]([{ isIntersecting: true }]));
+      await screen.findByText("f0.png");
+      expect(document.querySelectorAll(".man-file-gallery__card")).toHaveLength(PAGE_SIZE);
+      act(() => callbacks[callbacks.length - 1]([{ isIntersecting: true }]));
+      expect(document.querySelectorAll(".man-file-gallery__card")).toHaveLength(PAGE_SIZE + 5);
+    });
   });
 });
