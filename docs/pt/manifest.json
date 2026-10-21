@@ -1,0 +1,27 @@
+{
+  "title": "Galeria de arquivos",
+  "summary": "Exibe os arquivos de uma coleção do Gerenciador de Arquivos como uma galeria de blocos.",
+  "icon": "🗂️",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Visão geral",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Passo a passo",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Configurações",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "FAQ",
+      "file": "faq.md"
+    }
+  ]
+}

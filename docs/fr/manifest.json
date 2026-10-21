@@ -1,0 +1,27 @@
+{
+  "title": "Galerie de fichiers",
+  "summary": "Affiche les fichiers d’une collection depuis le gestionnaire de fichiers sous forme de galerie de tuiles.",
+  "icon": "🗂️",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Aperçu",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Étape par étape",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Décors",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "FAQ",
+      "file": "faq.md"
+    }
+  ]
+}

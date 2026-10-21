@@ -1,0 +1,27 @@
+{
+  "title": "Galería de archivos",
+  "summary": "Muestra los archivos de una colección desde el Administrador de Archivos como una galería de mosaicos.",
+  "icon": "🗂️",
+  "pages": [
+    {
+      "id": "overview",
+      "title": "Resumen",
+      "file": "overview.md"
+    },
+    {
+      "id": "usage",
+      "title": "Paso a paso",
+      "file": "usage.md"
+    },
+    {
+      "id": "settings",
+      "title": "Escenarios",
+      "file": "settings.md"
+    },
+    {
+      "id": "faq",
+      "title": "Preguntas frecuentes",
+      "file": "faq.md"
+    }
+  ]
+}
