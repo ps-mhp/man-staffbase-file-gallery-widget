@@ -65,21 +65,19 @@ export function formatBytes(bytes: number | null): string {
 function FileTile({ file }: { file: GalleryFile }): React.JSX.Element {
   const meta = [file.extension.toUpperCase(), formatBytes(file.bytes)].filter((part) => part !== "").join(" · ");
   return (
-    <li className="man-file-gallery__item">
-      <a className="man-file-gallery__link" href={file.url} target="_blank" rel="noopener noreferrer">
-        <span className="man-file-gallery__preview">
-          {file.thumbnailUrl !== null ? (
-            <img className="man-file-gallery__image" src={file.thumbnailUrl} alt="" loading="lazy" />
-          ) : (
-            <span className="man-file-gallery__badge" aria-hidden="true">
-              {file.extension.toUpperCase() || "DATEI"}
-            </span>
-          )}
-        </span>
-        <span className="man-file-gallery__name">{file.fileName}</span>
-        {meta !== "" && <span className="man-file-gallery__meta">{meta}</span>}
-      </a>
-    </li>
+    <a className="man-file-gallery__card" href={file.url} target="_blank" rel="noopener noreferrer">
+      <span className="man-file-gallery__preview">
+        {file.thumbnailUrl !== null ? (
+          <img className="man-file-gallery__image" src={file.thumbnailUrl} alt="" loading="lazy" />
+        ) : (
+          <span className="man-file-gallery__badge" aria-hidden="true">
+            {file.extension.toUpperCase() || "DATEI"}
+          </span>
+        )}
+      </span>
+      <span className="man-file-gallery__name">{file.fileName}</span>
+      {meta !== "" && <span className="man-file-gallery__meta">{meta}</span>}
+    </a>
   );
 }
 
@@ -141,11 +139,11 @@ export function FileGallery({
     body = <p className="man-file-gallery__status">{regex === null ? MESSAGES.empty : MESSAGES.noMatch}</p>;
   } else {
     body = (
-      <ul className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
+      <div className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
         {state.files.map((file) => (
           <FileTile key={file.id} file={file} />
         ))}
-      </ul>
+      </div>
     );
   }
 
