@@ -1,0 +1,11 @@
+{
+  "name": "@man/file-gallery-widget",
+  "version": "0.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "staffbase": {
+    "element": "file-gallery-widget",
+    "bundle": "dist/file-gallery-widget.js"
+  }
+}
