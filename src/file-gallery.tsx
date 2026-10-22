@@ -41,6 +41,7 @@ type State =
 
 /** So viele Karten werden zunächst gerendert; weitere folgen beim Scrollen. */
 export const PAGE_SIZE = 24;
+const SKELETON_COUNT = 6;
 
 /** `true`, sobald das Element im sichtbaren Bereich ist (eingeklappte Bereiche zählen nicht). Ohne IntersectionObserver sofort `true`. */
 function useInView(ref: React.RefObject<HTMLElement | null>, active: boolean): boolean {
@@ -195,7 +196,17 @@ export function FileGallery({
       </p>
     );
   } else if (files === null) {
-    body = <p className="man-file-gallery__status">{MESSAGES.loading}</p>;
+    body = (
+      <div className={`man-file-gallery__grid man-file-gallery__grid--${layout}`} role="status" aria-busy="true" aria-label={MESSAGES.loading}>
+        {Array.from({ length: SKELETON_COUNT }, (_, index) => (
+          <div key={index} className="man-file-gallery__card man-file-gallery__card--skeleton" aria-hidden="true">
+            <span className="man-file-gallery__preview man-file-gallery__shimmer" />
+            <span className="man-file-gallery__line man-file-gallery__shimmer" />
+            <span className="man-file-gallery__line man-file-gallery__line--short man-file-gallery__shimmer" />
+          </div>
+        ))}
+      </div>
+    );
   } else if (files.length === 0) {
     body = <p className="man-file-gallery__status">{hasFilter ? MESSAGES.noMatch : MESSAGES.empty}</p>;
   } else {
@@ -206,7 +217,18 @@ export function FileGallery({
             <FileTile key={file.id} file={file} />
           ))}
         </div>
-        {hasMore && <div ref={moreRef} className="man-file-gallery__more" aria-hidden="true" />}
+        {hasMore && (
+          <div ref={moreRef} className="man-file-gallery__more" aria-hidden="true">
+            <div className={`man-file-gallery__grid man-file-gallery__grid--${layout}`}>
+              {Array.from({ length: 3 }, (_, index) => (
+                <div key={index} className="man-file-gallery__card man-file-gallery__card--skeleton">
+                  <span className="man-file-gallery__preview man-file-gallery__shimmer" />
+                  <span className="man-file-gallery__line man-file-gallery__shimmer" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </>
     );
   }

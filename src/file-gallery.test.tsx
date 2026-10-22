@@ -134,9 +134,9 @@ describe("FileGallery", () => {
       render(<FileGallery collectionId={COLLECTION} maxItems={0} sort="name-asc" loadFiles={jest.fn().mockResolvedValue(many)} />);
       act(() => callbacks[0]([{ isIntersecting: true }]));
       await screen.findByText("f0.png");
-      expect(document.querySelectorAll(".man-file-gallery__card")).toHaveLength(PAGE_SIZE);
+      expect(document.querySelectorAll("a.man-file-gallery__card")).toHaveLength(PAGE_SIZE);
       act(() => callbacks[callbacks.length - 1]([{ isIntersecting: true }]));
-      expect(document.querySelectorAll(".man-file-gallery__card")).toHaveLength(PAGE_SIZE + 5);
+      expect(document.querySelectorAll("a.man-file-gallery__card")).toHaveLength(PAGE_SIZE + 5);
     });
   });
 });
