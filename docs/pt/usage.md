@@ -1,30 +1,41 @@
 # Passo a passo
 
-## Preparando o caso básico
+## Configurar o caso básico
 
-1. Crie uma coleção no estúdio sob **Arquivos** (ou crie uma já existente
-   use) e coloque os arquivos desejados nele. 
-2. Adicionar o widget **Galeria de Arquivos** à página. 
-3. Opcionalmente, selecione uma coleção no campo **Coleção (opcional)**. Sem seleção, o widget mostrará os arquivos de todas as coleções. 
-4. Opcionalmente, configure um filtro: **Filter: Field**, **Filter: Condition** e **Filter: Value** (ex.: Nome do Arquivo · Contém · 'PIM'). 
-5. Em **Ordem**, especifique qual vem primeiro e, opcionalmente, insira um número em **Mostrar no máximo**. 
-6. Salvar e pré-visualizar. 
+1. No Studio, em **Ficheiros**, crie uma coleção (ou utilize uma já existente
+  ) e coloque os ficheiros pretendidos nessa coleção.
+2. Na página, insira o widget **Galeria de ficheiros**. A janela
+   **Selecionar ficheiros** abre-se.
+3. À esquerda, em **Fonte**, clique na coleção. Se não for selecionada nenhuma opção, aplica-se
+   **Todos os ficheiros**: os ficheiros de todas as coleções.
+4. Opcionalmente, em **Filtro e ordem**, configure um filtro:
+   **Filtrar por**, **Condição** e **Valor** (por exemplo, Nome do ficheiro · contém ·
+   `PIM`).
+5. Em **Ordenação**, defina a ordem de exibição e, opcionalmente, em
+   **Apresentação**, em **No máximo**, introduza um número.
+6. Na parte superior, selecione **Ambiente de trabalho**, **Tablet** ou **Móvel** e verifique o resultado
+   na pré-visualização.
+7. Clique em **Aplicar** e guarde a caixa de diálogo de configurações.
 
-## Mostrar os arquivos mais recentes
+## Mostrar os ficheiros mais recentes
 
-1. **Ordem**: Selecione "Mais Novo primeiro". 
-2. **Mostrar no máximo**: Insira a quantidade, por exemplo, 5. 
-3. Opcionalmente, selecione **Collection** e defina um filtro para restringir a seleção. 
+1. **Ordenação**: selecione «Mais recentes primeiro».
+2. **Máximo**: introduza um número, por exemplo, 5.
+3. Opcionalmente, selecione uma coleção à esquerda e defina um filtro para
+   restringir a seleção.
 
-## Mudança depois
+## Alterar posteriormente
 
-1. Adicionar ou remover arquivos: diretamente na coleção no
-   Gerenciador de Arquivos — a galeria mostra o novo estado na próxima vez que for carregado. 
-2. Mostrar outra coleção: Abrir as configurações de widgets e selecionar no
-   **Coleção (opcional)** selecione outro ou limpe a seleção. 
+1. Adicionar ou remover ficheiros: diretamente na coleção no
+   Gestor de ficheiros — a galeria mostra o novo estado na próxima vez que for carregada.
+2. Mostrar outra coleção: abra as definições do widget, na janela
+   **Selecionar ficheiros**, à esquerda, clique noutra coleção ou em **Todos os ficheiros**
+   e aplique as alterações.
 
-## Quando algo não funciona
+## Se algo não funcionar
 
-1. Leia a mensagem no widget e procure no FAQ. 
-2. Se a coleção estiver ausente da lista, "Insira outro ID de coleção..." 
-   e insira o ID de 24 dígitos da coleção.
+1. Leia a mensagem no widget e consulte as Perguntas Frequentes (FAQ).
+2. Se faltar uma coleção na lista à esquerda, abaixo do formulário
+   **Introduzir manualmente o ID da coleção**, desdobre a secção e insira o ID de 24 dígitos ou
+   o endereço da coleção.
+3. Se a lista não carregar, aparecerá lá **Tentar novamente**.

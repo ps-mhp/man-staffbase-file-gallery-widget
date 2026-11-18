@@ -1,30 +1,41 @@
-# Pas à pas
+# Étape par étape
 
-## Installer le dossier de base
+## Configurer un cas de base
 
-1. Créer une collection dans le studio sous **Fichiers** (ou en créer une existante
-   Utilisez) et y mettez les fichiers désirés. 
-2. Ajouter le widget **Galerie de fichiers** à la page. 
-3. Optionnellement, sélectionnez une collection dans le champ **Collection (optionnel)**. Sans sélection, le widget affichera les fichiers de toutes les collections. 
-4. Optionnellement, configurez un filtre : **Filter : Champ**, **Filtre : Condition** et **Filter : Valeur** (par exemple Nom du fichier · Contient · 'PIM'). 
-5. Dans **Ordre**, spécifiez lequel vient en premier, et entrez éventuellement un numéro sous **Afficher au maximum**. 
-6. Sauvegarder et prévisualiser. 
+1. Dans Studio, sous **Fichiers**, créez une collection (ou utilisez-en une
+   existante) et ajoutez-y les fichiers souhaités.
+2. Insérez le widget **Galerie de fichiers** sur la page. La fenêtre
+   **Sélectionner des fichiers** s'ouvre.
+3. À gauche, sous **Source**, cliquez sur la collection. Si aucune sélection n'est effectuée,
+   **Tous les fichiers** s'applique : les fichiers de toutes les collections.
+4. Vous pouvez, si vous le souhaitez, configurer un filtre sous **Filtre & Ordre** :
+   **Filtrer par**, **Condition** et **Valeur** (par ex. Nom de fichier · contient ·
+   `PIM`).
+5. Sous **Tri**, définissez l’ordre d’affichage et, si vous le souhaitez, sous
+   **Affichage**, sous **Au maximum**, entrez un nombre.
+6. En haut, sélectionnez **Ordinateur de bureau**, **Tablette** ou **Mobile** et vérifiez le résultat
+   dans l’aperçu.
+7. Cliquez sur **Appliquer** pour enregistrer la boîte de dialogue des paramètres.
 
-## Montrer les derniers fichiers
+## Afficher les fichiers les plus récents
 
-1. **Ordre** : Sélectionnez « Nouveau en premier ». 
-2. **Montrer au maximum** : Entrer la quantité, par exemple 5. 
-3. Optionnellement, sélectionnez **Collection** et définissez un filtre pour affiner la sélection. 
+1. **Tri** : sélectionnez « Les plus récents en premier ».
+2. **Au maximum** : saisissez un nombre, par exemple 5.
+3. Vous pouvez également sélectionner une collection à gauche et définir un filtre pour
+   affiner la sélection.
 
-## Changement après
+## Modifier ultérieurement
 
-1. Ajouter ou supprimer des fichiers : directement dans la collection dans le
-   Gestionnaire de fichiers — la galerie affiche le nouvel état lors du chargement suivant. 
-2. Afficher l’autre collection : Ouvrir les paramètres du widget et sélectionner dans le
-   **Collection (optionnel)** sélectionne un autre ou efface la sélection. 
+1. Ajouter ou supprimer des fichiers : directement dans la collection via le
+   gestionnaire de fichiers — la galerie affichera les modifications lors du prochain chargement.
+2. Afficher une autre collection : ouvrez les paramètres du widget, dans la fenêtre
+   **Sélectionner des fichiers** à gauche, cliquez sur une autre collection ou sur **Tous les fichiers**
+   puis validez.
 
-## Quand quelque chose ne marche pas
+## En cas de problème
 
-1. Lisez le message dans le widget et consultez-le dans la FAQ. 
-2. Si la collection manque dans la liste, « Saisissez un autre identifiant de collection... » 
-   et saisir l’ID à 24 chiffres de la collection.
+1. Lisez le message affiché dans le widget et consultez la FAQ.
+2. Si une collection manque dans la liste de gauche, sous le formulaire
+   **Saisir manuellement l’ID de la collection**, développez la section et insérez l’ID à 24 chiffres ou
+   l’adresse de la collection.
+3. Si la liste ne se charge pas, le message **Réessayer** s’affiche.

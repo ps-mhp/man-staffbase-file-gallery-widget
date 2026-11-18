@@ -1,18 +1,20 @@
 # Galerie de fichiers
 
-La galerie de fichiers affiche les fichiers du gestionnaire de fichiers (Studio → Files)
-d’une page : celle d’une collection ou, sans sélection, celle de toutes les collections. 
-Les fichiers peuvent être filtrés, triés et limités à un certain nombre, par exemple 
-comme « les 5 PDF les plus récents ». Si vous mettez des fichiers dans la collection,
-ou en retirer, cela modifie aussi la galerie — la page elle-même doit être
-ne sont pas traités pour cela. 
+La galerie de fichiers affiche les fichiers issus du gestionnaire de fichiers (Studio → Fichiers) sur
+une seule page : ceux d'une collection ou, si aucune sélection n'est effectuée, ceux de toutes les collections.
+Les fichiers peuvent être filtrés, triés et limités à un certain nombre, par exemple
+« les 5 derniers PDF ». L’ajout ou la suppression de fichiers dans la collection
+modifie également la galerie — il n’est pas nécessaire de modifier la page elle-même
+pour cela.
 
-## Ce que voient les lecteurs
+## Ce que voient les lecteurs et lectrices
 
-Une grille de tuiles. Chaque tuile affiche une image d’aperçu (pour les fichiers sans
-Prévisualisez le type de fichier, comme PDF), y compris le nom du fichier, le type et la taille. Sur
-Cliquez pour ouvrir le fichier dans un nouvel onglet. 
+Une grille de vignettes ou une liste. Chaque fichier affiche une vignette
+(pour les fichiers sans aperçu, le type de fichier, par exemple « PDF »), ainsi que le nom du fichier, son type
+et sa taille. Un clic ouvre le fichier dans un nouvel onglet.
 
 ## Ce que vous voyez dans l’éditeur CMS
 
-Même grille que sur la page publiée.
+La même chose que sur la page publiée. Les réglages s’effectuent dans la fenêtre
+**Sélectionner les fichiers** : à gauche, la source ; au centre, les filtres, le tri et
+l’affichage ; si vous le souhaitez, un aperçu pour ordinateur, tablette et mobile.

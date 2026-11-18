@@ -1,18 +1,20 @@
-# Galleria di archivi
+# Galleria file
 
-La Galleria File mostra i file dal File Manager (Studio → Files)
-di una pagina: quella di una raccolta o, senza selezione, quella di tutte le raccolte. 
-I file possono essere filtrati, ordinati e limitati a un numero, ad esempio 
-come "i 5 PDF più recenti". Se inserisci file nella collezione,
-oppure rimosso, questo cambia anche la galleria — la pagina stessa deve essere
-non vengono processati per questo. 
+La galleria file mostra i file presenti nel Gestore file (Studio → File) su
+una singola pagina: quelli di una raccolta o, se non si effettua alcuna selezione, quelli di tutte le raccolte.
+I file possono essere filtrati, ordinati e limitati a un determinato numero, ad esempio
+come «i 5 PDF più recenti». Chi aggiunge file alla raccolta
+o li rimuove da essa, modifica di conseguenza anche la galleria — non è necessario
+modificare la pagina stessa.
 
 ## Cosa vedono i lettori
 
-Una griglia di tessere. Ogni casella mostra un'immagine di anteprima (per i file senza
-Anteprima del tipo di file, come PDF), includendo il nome del file, il tipo e la dimensione. On
-Click apre il file in una nuova scheda. 
+Una griglia di riquadri o un elenco. Ogni file mostra un’anteprima
+(per i file senza anteprima, il tipo di file, ad es. «PDF»), oltre al nome del file, al tipo
+e alle dimensioni. Un clic apre il file in una nuova scheda.
 
-## Quello che vedi nell'editor CMS
+## Cosa vedete nell’editor CMS
 
-Stessa griglia della pagina pubblicata.
+Lo stesso che sulla pagina pubblicata. Le impostazioni si configurano nella finestra
+**Seleziona file**: a sinistra la fonte, al centro filtri, ordinamento e
+visualizzazione; se lo si desidera, un’anteprima per desktop, tablet e dispositivi mobili.

@@ -1,6 +1,6 @@
 {
-  "title": "Galería de archivos",
-  "summary": "Muestra los archivos de una colección desde el Administrador de Archivos como una galería de mosaicos.",
+  "title": "Galería de imágenes",
+  "summary": "Muestra los archivos de una colección del gestor de archivos en forma de galería de mosaicos.",
   "icon": "🗂️",
   "pages": [
     {
@@ -15,7 +15,7 @@
     },
     {
       "id": "settings",
-      "title": "Escenarios",
+      "title": "Configuración",
       "file": "settings.md"
     },
     {

@@ -1,18 +1,20 @@
 # Galeria plików
 
-Galeria plików pokazuje pliki z Menedżera plików (Studio → Files)
-strony: zbioru lub, bez selekcji, wszystkich zbiorów. 
-Pliki można filtrować, sortować i ograniczać do numeru, np. 
-jako "5 najnowszych PDF-ów". Jeśli dodasz pliki do kolekcji,
-lub usunięty z niej, to również zmienia galerię — sama strona musi być
-nie są w tym celu przetwarzani. 
+Galeria plików wyświetla pliki z menedżera plików (Studio → Pliki) na
+jednej stronie: pliki z jednej kolekcji lub, jeśli nie dokonano wyboru, pliki ze wszystkich kolekcji.
+Pliki można filtrować, sortować i ograniczać ich liczbę, np.
+do „5 najnowszych plików PDF”. Dodając pliki do kolekcji
+lub usuwając je z niej, zmienia się również zawartość galerii — nie ma potrzeby
+edytowania samej strony.
 
 ## Co widzą czytelnicy
 
-Siatka kafelków. Każdy kafelek pokazuje obraz podglądowy (dla plików bez
-Podgląd typu pliku, takiego jak PDF), w tym nazwę pliku, typ i rozmiar. Na
-Kliknięcie otwiera plik na nowej karcie. 
+Siatka kafelków lub lista. Każdy plik wyświetla miniaturę
+(w przypadku plików bez podglądu — typ pliku, np. „PDF”), a także nazwę pliku, typ
+i rozmiar. Kliknięcie otwiera plik w nowej karcie.
 
 ## Co widzisz w edytorze CMS
 
-Ta sama siatka co na opublikowanej stronie.
+To samo, co na opublikowanej stronie. Ustawienia dokonuje się w oknie
+**Wybierz pliki**: po lewej stronie źródło, pośrodku filtry, sortowanie i
+wyświetlanie, a na życzenie podgląd dla komputerów stacjonarnych, tabletów i urządzeń mobilnych.

@@ -1,6 +1,6 @@
 {
-  "title": "Bestandsgalerij",
-  "summary": "Toont de bestanden van een collectie vanuit de Bestandsbeheerder als een tegelgalerij.",
+  "title": "Fotogalerij",
+  "summary": "Geeft de bestanden van een verzameling uit de bestandsbeheerder weer als een tegelgalerij.",
   "icon": "🗂️",
   "pages": [
     {
@@ -20,7 +20,7 @@
     },
     {
       "id": "faq",
-      "title": "FAQ",
+      "title": "Veelgestelde vragen",
       "file": "faq.md"
     }
   ]

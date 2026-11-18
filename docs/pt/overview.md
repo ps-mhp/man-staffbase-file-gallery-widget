@@ -1,18 +1,20 @@
-# Galeria de arquivos
+# Galeria de ficheiros
 
-A Galeria de Arquivos mostra arquivos do Gerenciador de Arquivos (Studio → Files)
-de uma página: a de uma coleção ou, sem seleção, a de todas as coleções. 
-Arquivos podem ser filtrados, organizados e limitados a um número, por exemplo. 
-como "os 5 PDFs mais recentes". Se você colocar arquivos na coleção,
-ou removido dele, isso também muda a galeria — a própria página deve ser
-não são processados para isso. 
+A galeria de ficheiros apresenta ficheiros do Gestor de ficheiros (Studio → Ficheiros) numa
+única página: os de uma coleção ou, se não for selecionada nenhuma, os de todas as coleções.
+Os ficheiros podem ser filtrados, ordenados e limitados a um determinado número, por exemplo,
+como «os 5 PDFs mais recentes». Quem adicionar ficheiros à coleção
+ou os remover dela, altera também a galeria — não é necessário
+editar a própria página para isso.
 
 ## O que os leitores veem
 
-Uma grade de tiles. Cada tile mostra uma imagem de pré-visualização (para arquivos sem
-Pré-visualize o tipo de arquivo, como PDF), incluindo o nome do arquivo, tipo e tamanho. Ligado
-Clique para abrir o arquivo em uma nova aba. 
+Uma grelha de mosaicos ou uma lista. Cada ficheiro apresenta uma imagem de pré-visualização
+(no caso de ficheiros sem pré-visualização, o tipo de ficheiro, por exemplo, «PDF»), juntamente com o nome do ficheiro, o tipo
+e o tamanho. Um clique abre o ficheiro numa nova aba.
 
-## O que você vê no editor CMS
+## O que vê no editor do CMS
 
-Mesma grade da página publicada.
+O mesmo que na página publicada. A configuração é feita na janela
+**Selecionar ficheiros**: à esquerda, a fonte; no centro, os filtros, a ordenação e
+a apresentação; se desejar, uma pré-visualização para computador, tablet e telemóvel.

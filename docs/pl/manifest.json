@@ -1,6 +1,6 @@
 {
-  "title": "Galeria plików",
-  "summary": "Wyświetla pliki kolekcji z Menedżera plików jako galerię kafelków.",
+  "title": "Galeria zdjęć",
+  "summary": "Wyświetla pliki z kolekcji z menedżera plików w formie galerii kafelkowej.",
   "icon": "🗂️",
   "pages": [
     {
@@ -20,7 +20,7 @@
     },
     {
       "id": "faq",
-      "title": "FAQ",
+      "title": "Najczęściej zadawane pytania",
       "file": "faq.md"
     }
   ]

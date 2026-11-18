@@ -1,24 +1,38 @@
 # FAQ
 
-**Pytanie:** Wiżet pokazuje "Nie masz dostępu do tych plików." 
+**Pytanie:** Widżet wyświetla komunikat „Nie masz dostępu do tych plików”.
 
-Odpowiedź: Osoba zalogowana nie może czytać kolekcji. W
-Menedżer plików sprawdza prawa dostępu do kolekcji. 
+Odpowiedź: Zalogowana osoba nie ma uprawnień do przeglądania tej kolekcji. W
+Menedżerze plików sprawdź uprawnienia dostępu do kolekcji.
 
-**Pytanie:** Widżet pokazuje "Brak plików znalezionych." 
+**Pytanie:** Widżet wyświetla komunikat „Nie znaleziono żadnych plików”.
 
-Odpowiedź: Kolekcja (lub, bez zaznaczenia, dowolna widoczna kolekcja) nie zawiera żadnych plików. Umieść pliki w kolekcji w menedżerze plików. Pliki bez kolekcji nie są wyświetlane w widżecie. 
+Odpowiedź: Kolekcja (lub, w przypadku opcji **Wszystkie pliki**, każda widoczna kolekcja) nie zawiera żadnych plików. Należy umieścić pliki w kolekcji w menedżerze plików. Widżet nie wyświetla plików nieprzypisanych do żadnej kolekcji.
 
-**Pytanie:** Widżet pokazuje "Nie udało się załadować plików: ..." 
+**Pytanie:** Widżet wyświetla komunikat „Nie udało się załadować plików: …”
 
-Odpowiedź: Żądanie nie powiodło się, np. dlatego, że kolekcja została usunięta
-lub połączenie zostało utracone. strona ponownego ładowania; wiadomość, że
-Ponownie wybierz Kolekcję w ustawieniach. 
+Odpowiedź: Żądanie zakończyło się niepowodzeniem, np. ponieważ kolekcja została usunięta
+lub nastąpiło przerwanie połączenia. Odśwież stronę; jeśli komunikat nadal się pojawia, w
+oknie **Wybierz pliki** wybierz ponownie źródło.
 
-**Pytanie:** Widżet pokazuje "Żaden plik nie pasuje do filtra." 
+**Pytanie:** Widżet wyświetla komunikat „Żaden plik nie pasuje do filtra”.
 
-Odpowiedź: Żaden plik nie pasuje do **Filtr: Pole**, **Warunk** i **Wartość**. Sprawdź filtr lub wyczyść wartość. 
+Odpowiedź: Żaden plik nie pasuje do **Filtruj według**, **Warunku** i **Wartości**. Sprawdź filtry lub wyczyść wartość.
 
-**Pytanie:** Widżet pokazuje "Filtr nie jest poprawnym wyrażeniem regularnym: ..." 
+**Pytanie:** Widżet wyświetla komunikat „Filtr nie jest prawidłowym wyrażeniem regularnym: …”
 
-Odpowiedź: Wyrażenie zawiera błąd składniowy, na przykład niezamknięty nawias. Popraw lub wyczyść pole.
+Odpowiedź: Wyrażenie zawiera błąd składniowy, np. niezamknięty nawias. Popraw w oknie lub wyczyść pole **Wartość** — nieprawidłowego wyrażenia nie da się tam już zatwierdzić.
+
+**Pytanie:** Na liście po lewej stronie brakuje kolekcji.
+
+Odpowiedź: Lista pokazuje kolekcje, do których Twoje konto ma dostęp. W
+formularzu **Ręczne wprowadzenie identyfikatora kolekcji** rozwiń menu i wprowadź identyfikator lub
+adres kolekcji.
+
+**Pytanie:** W Content Designerze okno wyświetla inną kolejność w starszej galerii niż strona.
+
+Odpowiedź: Starsze wersje zapisywały każde ustawienie w osobnym
+polu; w Content Designerze pola wyboru tych ustawień nie są odczytywane.
+Okno wyświetla wówczas ustawienie domyślne, natomiast na stronie nadal obowiązuje stara wartość.
+Gdy tylko ustawienie zostanie wybrane w oknie i zatwierdzone, zacznie
+obowiązywać.

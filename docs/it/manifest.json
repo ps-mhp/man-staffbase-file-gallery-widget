@@ -1,6 +1,6 @@
 {
-  "title": "Galleria di file",
-  "summary": "Visualizza i file di una collezione dal File Manager come galleria di tessere.",
+  "title": "Galleria immagini",
+  "summary": "Visualizza i file di una raccolta dal Gestore file sotto forma di galleria a riquadri.",
   "icon": "🗂️",
   "pages": [
     {

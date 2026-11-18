@@ -1,6 +1,6 @@
 {
-  "title": "File gallery",
-  "summary": "Displays the files of a collection from the File Manager as a tile gallery.",
+  "title": "Photo Gallery",
+  "summary": "Displays the files in a collection from the File Manager as a tile gallery.",
   "icon": "🗂️",
   "pages": [
     {

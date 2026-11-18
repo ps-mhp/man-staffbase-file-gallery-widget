@@ -1,6 +1,6 @@
 {
-  "title": "Galerie de fichiers",
-  "summary": "Affiche les fichiers d’une collection depuis le gestionnaire de fichiers sous forme de galerie de tuiles.",
+  "title": "Galerie de photos",
+  "summary": "Affiche les fichiers d'une collection à partir du gestionnaire de fichiers sous forme de galerie de vignettes.",
   "icon": "🗂️",
   "pages": [
     {
@@ -15,7 +15,7 @@
     },
     {
       "id": "settings",
-      "title": "Décors",
+      "title": "Paramètres",
       "file": "settings.md"
     },
     {

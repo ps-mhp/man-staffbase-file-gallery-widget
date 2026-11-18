@@ -1,30 +1,41 @@
 # Stap voor stap
 
-## Zet de basiszaak op
+## Basisinstellingen configureren
 
-1. Maak een collectie aan in de studio onder **Bestanden** (of maak een bestaande aan
-   gebruiken) en de gewenste bestanden erin plaatsen. 
-2. Voeg de **Bestandsgalerij**-widget toe aan de pagina. 
-3. Selecteer optioneel een collectie in het **Collectie (optioneel)**-veld. Zonder selectie toont de widget de bestanden van alle collecties. 
-4. Optioneel stel je een filter in: **Filter: Veld**, **Filter: Voorwaarde** en **Filter: Waarde** (bijv. Bestandsnaam · Bevat · 'PIM'). 
-5. Onder **Order** specificeer welke het eerst komt, en voer optioneel een nummer in onder **Hooguit weergeven**. 
-6. Opslaan en bekijken. 
+1. Maak in Studio onder **Bestanden** een verzameling aan (of gebruik een bestaande
+   verzameling) en voeg de gewenste bestanden hieraan toe.
+2. Voeg op de pagina de widget **Bestandsgalerij** in. Het venster
+   **Bestanden selecteren** wordt geopend.
+3. Klik links onder **Bron** op de verzameling. Als je niets selecteert, geldt
+   **Alle bestanden**: de bestanden van alle verzamelingen.
+4. Stel optioneel onder **Filter & volgorde** een filter in:
+   **Filteren op**, **Voorwaarde** en **Waarde** (bijv. Bestandsnaam · bevat ·
+   `PIM`).
+5. Stel onder **Sortering** in wat als eerste wordt weergegeven en voer optioneel onder
+   **Weergave** bij **Maximaal** een aantal invoeren.
+6. Schakel bovenaan over naar **Desktop**, **Tablet** of **Mobiel** en controleer het resultaat
+   in het voorbeeld.
+7. Klik op **Toepassen** en sla het instellingenvenster op.
 
-## Laat de nieuwste bestanden zien
+## De nieuwste bestanden weergeven
 
-1. **Volgorde**: Selecteer eerst "Nieuwste". 
-2. **Hooguit tonen**: Voer de hoeveelheid in, bijvoorbeeld 5. 
-3. Selecteer optioneel **Collectie** en stel een filter in om de selectie te verkleinen. 
+1. **Sortering**: kies „Nieuwste eerst“.
+2. **Maximaal**: voer een aantal in, bijv. 5.
+3. Kies eventueel links een verzameling en stel een filter in om de
+   selectie te verfijnen.
 
-## Verander daarna
+## Achteraf wijzigen
 
-1. Bestanden toevoegen of verwijderen: direct in de collectie in de
-   Bestandsbeheerder — de galerij toont de nieuwe status de volgende keer dat deze wordt geladen. 
-2. Andere collectie tonen: Open widget-instellingen en selecteer in de
-   **Verzameling (optioneel)** selecteer een andere of maak de selectie leeg. 
+1. Bestanden toevoegen of verwijderen: rechtstreeks in de verzameling in de
+   bestandsbeheerder — de galerij toont de nieuwe stand bij het volgende laden.
+2. Een andere verzameling weergeven: open de widgetinstellingen, klik in het venster
+   **Bestanden selecteren** links op een andere verzameling of **Alle bestanden**
+   en bevestig.
 
 ## Als iets niet werkt
 
-1. Lees het bericht in de widget en zoek het op in de FAQ. 
-2. Als de collectie ontbreekt in de lijst, "Voer een andere verzamelings-ID in..." 
-   en voer het 24-cijferige ID van de collectie in.
+1. Lees het bericht in de widget en kijk in de FAQ.
+2. Ontbreekt er een verzameling in de lijst aan de linkerkant, klap dan onder het formulier
+   **Verzamelings-ID handmatig invoeren** uit en voer de 24-cijferige ID of
+   het adres van de verzameling in.
+3. Als de lijst niet laadt, staat daar **Opnieuw proberen**.

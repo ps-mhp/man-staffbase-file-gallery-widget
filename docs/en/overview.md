@@ -1,18 +1,20 @@
-# File gallery
+# File Gallery
 
-The File Gallery shows files from the File Manager (Studio → Files)
-of a page: that of a collection or, without selection, that of all collections. 
-Files can be filtered, sorted, and limited to a number, e.g. 
-as "the 5 most recent PDFs". If you put files in the collection,
-or removed from it, this also changes the gallery — the page itself must be
-are not processed for this. 
+The File Gallery displays files from the File Manager (Studio → Files) on
+a single page: either those from a specific collection or, if no selection is made, those from all collections.
+Files can be filtered, sorted, and limited to a certain number, e.g.,
+“the 5 most recent PDFs.” Adding or removing files from the collection
+also updates the gallery—the page itself does not need to
+be edited for this.
 
-## What readers see
+## What Readers See
 
-A grid of tiles. Each tile shows a preview image (for files without
-Preview the file type, such as PDF), including the file name, type, and size. On
-Click opens the file in a new tab. 
+A grid of tiles or a list. Each file displays a preview image
+(for files without a preview, the file type, e.g., “PDF”), along with the filename, type,
+and size. Clicking opens the file in a new tab.
 
-## What you see in the CMS editor
+## What You See in the CMS Editor
 
-Same grid as on the published page.
+The same as on the published page. Settings are configured in the
+**Select Files** window: the source on the left, filters, sorting, and
+display options in the middle, and—if desired—previews for desktop, tablet, and mobile.

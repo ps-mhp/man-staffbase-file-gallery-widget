@@ -1,24 +1,38 @@
-# FAQ
+# Perguntas Frequentes
 
-**Pergunta:** O widget mostra "Você não tem acesso a esses arquivos." 
+**Pergunta:** O widget mostra «Não tem acesso a estes ficheiros.»
 
-Resposta: A pessoa logada não pode ler a coleção. Na
-Gerenciador de Arquivos, verifique os direitos de acesso da coleção. 
+Resposta: O utilizador que está a iniciar sessão não tem permissão para ler a coleção. No
+Gestor de Ficheiros, verifique os direitos de acesso da coleção.
 
-**Pergunta:** O widget mostra "Nenhum arquivo encontrado." 
+**Pergunta:** O widget apresenta a mensagem «Não foram encontrados ficheiros.»
 
-Resposta: A coleção (ou, sem seleção, qualquer coleção visível) não contém nenhum arquivo. Coloque arquivos em uma coleção no gerenciador de arquivos. Arquivos sem coleção não são exibidos no widget. 
+Resposta: A coleção (ou, no caso de **Todos os ficheiros**, qualquer coleção visível) não contém ficheiros. Coloque os ficheiros numa coleção no Gestor de ficheiros. O widget não apresenta ficheiros que não estejam numa coleção.
 
-**Pergunta:** O widget mostra "Falhou ao carregar arquivos: ..." 
+**Pergunta:** O widget apresenta a mensagem «Não foi possível carregar os ficheiros: …»
 
-Resposta: O pedido falhou, por exemplo, porque a coleção foi excluída
-ou a conexão foi perdida. recarregar página; a mensagem que
-Reselecione Coleção nas configurações. 
+Resposta: A solicitação falhou, por exemplo, porque a coleção foi eliminada
+ou a ligação foi interrompida. Atualize a página; se a mensagem persistir, na
+janela **Selecionar ficheiros**, selecione novamente a fonte.
 
-**Pergunta:** O widget mostra "Nenhum arquivo corresponde ao filtro." 
+**Pergunta:** O widget apresenta «Nenhum ficheiro corresponde ao filtro.»
 
-Resposta: Nenhum arquivo corresponde a **Filter: Field**, **Condition** e **Value**. Verifique o filtro ou limpe o valor. 
+Resposta: Nenhum ficheiro corresponde a **Filtrar por**, **Condição** e **Valor**. Verifique os filtros ou esvazie o campo **Valor**.
 
-**Pergunta:** O widget mostra "O filtro não é uma expressão regular válida: ..." 
+**Pergunta:** O widget apresenta a mensagem «O filtro não é uma expressão regular válida: …»
 
-Resposta: A expressão contém um erro de sintaxe, como um parêntese não fechado. Corrija ou limpe o campo.
+Resposta: A expressão contém um erro de sintaxe, por exemplo, um parêntese não fechado. Corrija na janela ou esvazie o campo **Valor** — não é possível aplicar uma expressão inválida nesse campo.
+
+**Pergunta:** Falta uma coleção na lista à esquerda.
+
+Resposta: A lista apresenta as coleções a que a sua conta tem acesso. No
+formulário **Introduzir manualmente o ID da coleção**, desdobre-o e insira o ID ou o
+endereço da coleção.
+
+**Pergunta:** No Content Designer, a janela apresenta uma ordenação diferente da página no caso de uma galeria mais antiga.
+
+Resposta: As versões mais antigas guardavam cada configuração num
+campo próprio; no Content Designer, esses campos de seleção não são lidos. A
+janela mostra então a predefinição, mas na página continua a aplicar-se o valor antigo.
+Assim que a configuração for selecionada e aplicada na janela, passa a
+ser válida.

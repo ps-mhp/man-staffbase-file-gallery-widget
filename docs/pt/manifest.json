@@ -1,6 +1,6 @@
 {
-  "title": "Galeria de arquivos",
-  "summary": "Exibe os arquivos de uma coleção do Gerenciador de Arquivos como uma galeria de blocos.",
+  "title": "Galeria de imagens",
+  "summary": "Apresenta os ficheiros de uma coleção do Gestor de Ficheiros sob a forma de uma galeria de mosaicos.",
   "icon": "🗂️",
   "pages": [
     {
@@ -15,12 +15,12 @@
     },
     {
       "id": "settings",
-      "title": "Configurações",
+      "title": "Definições",
       "file": "settings.md"
     },
     {
       "id": "faq",
-      "title": "FAQ",
+      "title": "Perguntas frequentes",
       "file": "faq.md"
     }
   ]
