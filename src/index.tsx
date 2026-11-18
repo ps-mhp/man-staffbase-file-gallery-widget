@@ -21,12 +21,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { BlockFactory, BlockDefinition, ExternalBlockDefinition, BaseBlock } from "widget-sdk";
-import { fetchEntityCatalog } from "@shared/entity-picker/entity-catalog";
-import { startEntityPickerInjector } from "@shared/entity-picker/entity-picker-injector";
-import { ALL_ATTRIBUTES, COLLECTION_ID_ATTRIBUTE, configurationSchema, uiSchema } from "./configuration-schema";
-import { collectionCatalogSource } from "./file-collection";
+import { ALL_ATTRIBUTES, configurationSchema, uiSchema } from "./configuration-schema";
 import { FileGallery } from "./file-gallery";
 import { resolveFileGallerySettings } from "./file-gallery-config";
+import { startFileGalleryDialog } from "./file-gallery-dialog";
 import icon from "../resources/file-gallery-widget.svg";
 import pkg from "../package.json";
 
@@ -36,17 +34,6 @@ import pkg from "../package.json";
  * Felder älterer Fassungen.
  */
 const widgetAttributes: string[] = ALL_ATTRIBUTES;
-
-/** Exported only so tests can dispose of the observer on teardown. */
-export const stopCollectionPickerInjector = startEntityPickerInjector({
-  fieldKey: COLLECTION_ID_ATTRIBUTE,
-  fetchOptions: () => fetchEntityCatalog(collectionCatalogSource),
-  labels: {
-    placeholder: "Alle Dateien (keine Collection)",
-    manualOption: "Andere Collection-ID eingeben …",
-    unavailableNotice: "Die Liste der Collections konnte nicht geladen werden. Bitte die Collection-ID eintragen.",
-  },
-});
 
 const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
   return class FileGalleryWidgetBlock extends BaseBlockClass implements BaseBlock {
@@ -92,10 +79,18 @@ const externalBlockDefinition: ExternalBlockDefinition = {
   version: pkg.version,
 };
 
+// Das Fenster „Dateien auswählen“ hängt am Anmelden, nicht am Laden: auf
+// Modulebene gestartet, belegte das installierte Bündel das Feld
+// `file-gallery-config`, bevor feststeht, ob ein lokaler Entwicklungsserver
+// übernimmt – dann käme die Ansicht von dort, das Fenster aber aus der
+// veröffentlichten Fassung (im Hero-Slider-Widget so beobachtet).
 if (typeof window.defineBlock === "function") {
   void startWidget({
     name: "file-gallery-widget",
     version: pkg.version,
-    register: () => window.defineBlock(externalBlockDefinition),
+    register: () => {
+      startFileGalleryDialog();
+      window.defineBlock(externalBlockDefinition);
+    },
   });
 }

@@ -11,7 +11,6 @@
  * limitations under the License.
  */
 
-import { EntityCatalogSource, EntityOption } from "@shared/entity-picker/entity-catalog";
 import { isMediaUrl, isStaffbaseId } from "@shared/staffbase/ids";
 
 /**
@@ -64,7 +63,7 @@ interface RawEntry {
   thumbnail?: { url?: unknown };
 }
 
-interface RawCollection {
+export interface RawCollection {
   id?: unknown;
   name?: unknown;
   mediumCount?: unknown;
@@ -259,15 +258,3 @@ export function selectFiles(files: GalleryFile[], selection: FileSelection, filt
   kept.sort(COMPARATORS[selection.sort]);
   return selection.limit > 0 ? kept.slice(0, selection.limit) : kept;
 }
-
-/** Die Collections, die der Konfigurationsdialog zur Auswahl anbietet. */
-export const collectionCatalogSource: EntityCatalogSource<RawCollection> = {
-  fetchList: () => fetchCollections(),
-
-  toOption(entry: RawCollection): EntityOption | null {
-    if (!isStaffbaseId(entry?.id)) return null;
-    const name = typeof entry.name === "string" && entry.name.trim() !== "" ? entry.name.trim() : entry.id;
-    const count = typeof entry.mediumCount === "number" ? ` (${entry.mediumCount} Dateien)` : "";
-    return { id: entry.id, title: `${name}${count}` };
-  },
-};

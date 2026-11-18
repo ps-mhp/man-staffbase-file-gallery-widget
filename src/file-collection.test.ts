@@ -15,7 +15,7 @@ import {
   CollectionError,
   FileSelection,
   GalleryFile,
-  collectionCatalogSource,
+  fetchCollections,
   fetchCollectionFiles,
   fetchFiles,
   parseFileFilter,
@@ -143,7 +143,7 @@ describe("selectFiles", () => {
   });
 });
 
-describe("collectionCatalogSource", () => {
+describe("fetchCollections", () => {
   afterEach(() => jest.restoreAllMocks());
 
   it("pages through all collections", async () => {
@@ -151,14 +151,7 @@ describe("collectionCatalogSource", () => {
       .spyOn(globalThis, "fetch")
       .mockResolvedValueOnce(json({ entries: [{ id: id(1), name: "A" }], cursor: "c" }))
       .mockResolvedValueOnce(json({ entries: [], cursor: null }));
-    await expect(collectionCatalogSource.fetchList()).resolves.toEqual([{ id: id(1), name: "A" }]);
-  });
-
-  it("labels a collection with its name and file count", () => {
-    expect(collectionCatalogSource.toOption({ id: id(1), name: " Alle Bilder ", mediumCount: 462 })).toEqual({
-      id: id(1),
-      title: "Alle Bilder (462 Dateien)",
-    });
+    await expect(fetchCollections()).resolves.toEqual([{ id: id(1), name: "A" }]);
   });
 });
 
