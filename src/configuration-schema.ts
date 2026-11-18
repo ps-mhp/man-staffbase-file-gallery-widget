@@ -38,7 +38,7 @@ export const SORT_ATTRIBUTE = "sort";
  * Die einzelnen Felder bis 0.1.0-rc.7. Sie stehen weiter im Schema, damit der
  * Dialog ihre Werte führt: das Fenster „Dateien auswählen“ übernimmt sie beim
  * ersten Öffnen, und was es nicht lesen kann, gilt am Block weiter. Zu sehen
- * sind sie im eigenen Dialog nicht mehr (`legacy-fields.ts`).
+ * sind sie im eigenen Dialog nicht mehr (`@shared/legacy-fields`).
  */
 export const LEGACY_ATTRIBUTES = [
   COLLECTION_ID_ATTRIBUTE,
@@ -55,7 +55,7 @@ export type LegacyAttribute = (typeof LEGACY_ATTRIBUTES)[number];
 /**
  * Zu sehen ist nur `file-gallery-config`: an seine Stelle tritt der Knopf zum
  * Fenster „Dateien auswählen“. Die übrigen Felder sind die der Fassungen bis
- * 0.1.0-rc.7; ihre Optionen braucht `legacy-fields.ts`, um die Stelle einer
+ * 0.1.0-rc.7; ihre Optionen braucht `@shared/legacy-fields`, um die Stelle einer
  * Auswahl in ihren Wert zurückzuübersetzen.
  *
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/

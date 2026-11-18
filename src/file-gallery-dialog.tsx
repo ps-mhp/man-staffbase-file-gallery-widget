@@ -26,17 +26,24 @@ import * as React from "react";
 import { Folder } from "lucide-react";
 
 import { FieldModalShellOptions, startFieldModalInjector } from "@shared/config-modal";
+import { legacyFieldsFromSchema, readLegacyFields, startHiddenFields } from "@shared/legacy-fields";
 
-import { FILE_GALLERY_CONFIG_ATTRIBUTE, LEGACY_ATTRIBUTES } from "./configuration-schema";
+import { FILE_GALLERY_CONFIG_ATTRIBUTE, LEGACY_ATTRIBUTES, configurationSchema } from "./configuration-schema";
 import {
   FileGalleryConfig,
+  LegacyDialogValues,
   configFromLegacy,
   mergeConfig,
   readFileGalleryConfig,
   serializeFileGalleryConfig,
 } from "./file-gallery-config";
 import { fileGalleryChangesStatus, validateFileGalleryConfig } from "./file-gallery-rules";
-import { readLegacyFromDialog, startHiddenFields } from "./legacy-fields";
+
+const LEGACY_FIELDS = legacyFieldsFromSchema(LEGACY_ATTRIBUTES, configurationSchema);
+
+/** Die alten Felder, wie der eigene Dialog sie gerade führt. */
+const readLegacyFromDialog = (root: ParentNode): LegacyDialogValues =>
+  readLegacyFields(LEGACY_FIELDS, FILE_GALLERY_CONFIG_ATTRIBUTE, root).values as LegacyDialogValues;
 
 /**
  * Der Editor kommt erst, wenn ein Dialog ihn zeigt: er baut auf
