@@ -19,6 +19,13 @@ import { JSONSchema7 } from "json-schema";
  * `widgets.json` müssen gleich heißen: der Host speichert unter dem
  * Schlüssel und verwirft Attribute, die er nicht kennt.
  */
+
+/**
+ * Die ganze Konfiguration in einem Feld – siehe `file-gallery-config.ts`.
+ * Der Name trägt das Widget: Editoren hängen sich über `root_<Attribut>` ein,
+ * ohne das Widget zu kennen.
+ */
+export const FILE_GALLERY_CONFIG_ATTRIBUTE = "file-gallery-config";
 export const COLLECTION_ID_ATTRIBUTE = "collection-id";
 export const MAX_ITEMS_ATTRIBUTE = "max-items";
 export const LAYOUT_ATTRIBUTE = "layout";
@@ -28,10 +35,38 @@ export const FILTER_OPERATOR_ATTRIBUTE = "filter-operator";
 export const SORT_ATTRIBUTE = "sort";
 
 /**
+ * Die einzelnen Felder bis 0.1.0-rc.7. Sie stehen weiter im Schema, damit der
+ * Dialog ihre Werte führt: das Fenster „Dateien auswählen“ übernimmt sie beim
+ * ersten Öffnen, und was es nicht lesen kann, gilt am Block weiter. Zu sehen
+ * sind sie im eigenen Dialog nicht mehr (`legacy-fields.ts`).
+ */
+export const LEGACY_ATTRIBUTES = [
+  COLLECTION_ID_ATTRIBUTE,
+  MAX_ITEMS_ATTRIBUTE,
+  LAYOUT_ATTRIBUTE,
+  FILTER_ATTRIBUTE,
+  FILTER_FIELD_ATTRIBUTE,
+  FILTER_OPERATOR_ATTRIBUTE,
+  SORT_ATTRIBUTE,
+] as const;
+
+export type LegacyAttribute = (typeof LEGACY_ATTRIBUTES)[number];
+
+/**
+ * Zu sehen ist nur `file-gallery-config`: an seine Stelle tritt der Knopf zum
+ * Fenster „Dateien auswählen“. Die übrigen Felder sind die der Fassungen bis
+ * 0.1.0-rc.7; ihre Optionen braucht `legacy-fields.ts`, um die Stelle einer
+ * Auswahl in ihren Wert zurückzuübersetzen.
+ *
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/
  */
 export const configurationSchema: JSONSchema7 = {
   properties: {
+    [FILE_GALLERY_CONFIG_ATTRIBUTE]: {
+      type: "string",
+      title: "Dateigalerie",
+      default: "",
+    },
     [COLLECTION_ID_ATTRIBUTE]: {
       type: "string",
       title: "Collection (optional)",
@@ -95,20 +130,18 @@ export const configurationSchema: JSONSchema7 = {
 };
 
 /**
+ * Alle Attribute: das neue zuerst, die alten dahinter in der Reihenfolge, in
+ * der sie in `widgets.json` stehen.
+ */
+export const ALL_ATTRIBUTES: string[] = [FILE_GALLERY_CONFIG_ATTRIBUTE, ...LEGACY_ATTRIBUTES];
+
+/**
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/uiSchema
  */
 export const uiSchema: UiSchema = {
-  [COLLECTION_ID_ATTRIBUTE]: {
+  [FILE_GALLERY_CONFIG_ATTRIBUTE]: {
     "ui:help":
-      "Leer lassen, um die Dateien aller Collections zu zeigen, die Lesende sehen dürfen (Dateien ohne Collection fehlen dann). " +
-      "Fehlt die gewünschte Collection in der Liste, „Andere Collection-ID eingeben …“ wählen und die 24-stellige ID eintragen.",
-  },
-  [FILTER_ATTRIBUTE]: {
-    "ui:help":
-      "Der Wert zur Bedingung, ohne Beachtung der Groß-/Kleinschreibung. Leer lassen für keinen Filter. " +
-      "Bei „Passt auf regulären Ausdruck“ z. B. „^2026-\\d\\d_PIM_“ oder „Bericht|Protokoll“.",
-  },
-  [MAX_ITEMS_ATTRIBUTE]: {
-    "ui:help": "Gilt nach Filter und Reihenfolge: „Neueste zuerst“ mit 5 zeigt die fünf neuesten Treffer. 0 zeigt alle.",
+      "Quelle, Filter, Sortierung und Darstellung werden im Fenster „Dateien auswählen“ gepflegt; " +
+      "das Textfeld dahinter ist die Rohfassung.",
   },
 };

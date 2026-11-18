@@ -23,62 +23,19 @@ import ReactDOM from "react-dom/client";
 import { BlockFactory, BlockDefinition, ExternalBlockDefinition, BaseBlock } from "widget-sdk";
 import { fetchEntityCatalog } from "@shared/entity-picker/entity-catalog";
 import { startEntityPickerInjector } from "@shared/entity-picker/entity-picker-injector";
-import { isStaffbaseId } from "@shared/staffbase/ids";
-import {
-  COLLECTION_ID_ATTRIBUTE,
-  FILTER_ATTRIBUTE,
-  FILTER_FIELD_ATTRIBUTE,
-  FILTER_OPERATOR_ATTRIBUTE,
-  LAYOUT_ATTRIBUTE,
-  MAX_ITEMS_ATTRIBUTE,
-  SORT_ATTRIBUTE,
-  configurationSchema,
-  uiSchema,
-} from "./configuration-schema";
-import { FileSort, FilterField, FilterOperator, collectionCatalogSource } from "./file-collection";
-import { FileGallery, GalleryLayout } from "./file-gallery";
+import { ALL_ATTRIBUTES, COLLECTION_ID_ATTRIBUTE, configurationSchema, uiSchema } from "./configuration-schema";
+import { collectionCatalogSource } from "./file-collection";
+import { FileGallery } from "./file-gallery";
+import { resolveFileGallerySettings } from "./file-gallery-config";
 import icon from "../resources/file-gallery-widget.svg";
 import pkg from "../package.json";
 
-/** Attributes handled by the widget; mirrored in the configuration schema. */
-const widgetAttributes: string[] = [
-  COLLECTION_ID_ATTRIBUTE,
-  MAX_ITEMS_ATTRIBUTE,
-  LAYOUT_ATTRIBUTE,
-  FILTER_ATTRIBUTE,
-  FILTER_FIELD_ATTRIBUTE,
-  FILTER_OPERATOR_ATTRIBUTE,
-  SORT_ATTRIBUTE,
-];
-
-export function readCollectionId(value: unknown): string | null {
-  const id = typeof value === "string" ? value.trim() : "";
-  return isStaffbaseId(id) ? id : null;
-}
-
-export function readMaxItems(value: unknown): number {
-  const number = typeof value === "number" ? value : Number.parseInt(String(value ?? ""), 10);
-  return Number.isFinite(number) && number > 0 ? Math.floor(number) : 0;
-}
-
-export function readLayout(value: unknown): GalleryLayout {
-  return value === "list" ? "list" : "box";
-}
-
-const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
-  allowed.includes(value as T) ? (value as T) : fallback;
-
-export const readSort = (value: unknown): FileSort =>
-  pick(value, ["newest", "oldest", "name-asc", "name-desc", "size-desc", "size-asc"], "newest");
-
-export const readFilterField = (value: unknown): FilterField => pick(value, ["fileName", "extension", "creator"], "fileName");
-
 /**
- * Ein Block aus der Zeit, als es nur den Regex-Filter gab, hat keine Bedingung
- * gespeichert; sein Wert war ein regulärer Ausdruck und bleibt es.
+ * Die Attribute des Widgets, aus dem Schema genommen, damit beide nicht
+ * auseinanderlaufen: `file-gallery-config` zuerst, dahinter die einzelnen
+ * Felder älterer Fassungen.
  */
-export const readFilterOperator = (value: unknown): FilterOperator =>
-  pick(value, ["contains", "notContains", "startsWith", "endsWith", "equals", "regex"], "regex");
+const widgetAttributes: string[] = ALL_ATTRIBUTES;
 
 /** Exported only so tests can dispose of the observer on teardown. */
 export const stopCollectionPickerInjector = startEntityPickerInjector({
@@ -96,19 +53,11 @@ const factory: BlockFactory = (BaseBlockClass, _widgetApi) => {
     private _root: ReactDOM.Root | null = null;
 
     public renderBlock(container: HTMLElement): void {
-      const attrs = this.parseAttributes<Record<string, unknown>>();
+      // `file-gallery-config` je Schlüssel vor den einzelnen Feldern älterer
+      // Fassungen; ein alter Block ohne das neue Attribut liest sich wie bisher.
+      const settings = resolveFileGallerySettings(this.parseAttributes<Record<string, unknown>>());
       this._root ??= ReactDOM.createRoot(container);
-      this._root.render(
-        <FileGallery
-          collectionId={readCollectionId(attrs[COLLECTION_ID_ATTRIBUTE])}
-          maxItems={readMaxItems(attrs[MAX_ITEMS_ATTRIBUTE])}
-          layout={readLayout(attrs[LAYOUT_ATTRIBUTE])}
-          sort={readSort(attrs[SORT_ATTRIBUTE])}
-          filterField={readFilterField(attrs[FILTER_FIELD_ATTRIBUTE])}
-          filterOperator={readFilterOperator(attrs[FILTER_OPERATOR_ATTRIBUTE])}
-          filter={typeof attrs[FILTER_ATTRIBUTE] === "string" ? (attrs[FILTER_ATTRIBUTE] as string) : ""}
-        />,
-      );
+      this._root.render(<FileGallery {...settings} />);
     }
 
     public unmountBlock(_container: HTMLElement): void {
