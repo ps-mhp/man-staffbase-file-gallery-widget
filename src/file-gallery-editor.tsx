@@ -31,8 +31,9 @@ import { FormSection } from "@man/config-ui/form/form-section";
 import { InspectorPanel } from "@man/config-ui/inspector/inspector-panel";
 import { ConfigWorkspace } from "@man/config-ui/layout/config-workspace";
 import { useConfigShell } from "@man/config-ui/shell/shell-context";
+import { useEntityCatalog } from "@shared/entity-picker/use-entity-catalog";
 
-import { CollectionCatalogState, CollectionLoader, findCollection, useCollectionCatalog } from "./collection-catalog";
+import { CollectionCatalog, CollectionLoader, findCollection, loadCollections as loadAllCollections } from "./collection-catalog";
 import { FileGalleryConfig, shownSettings } from "./file-gallery-config";
 import { FileGalleryPreview, FileLoader, useCachedFileLoader } from "./file-gallery-preview";
 import { FILTER_ISSUE, validateFileGalleryConfig } from "./file-gallery-rules";
@@ -56,13 +57,13 @@ interface HeadingText {
 }
 
 /** Was im Kopf des Formulars steht: Name der Quelle, wo bekannt, sonst die ID. */
-export function headingOf(collectionId: string | null, state: CollectionCatalogState): HeadingText {
+export function headingOf(collectionId: string | null, catalog: Pick<CollectionCatalog, "status" | "items">): HeadingText {
   if (collectionId === null) return { title: ALL_FILES_LABEL, kicker: "Alle Sammlungen als Quelle" };
-  const entry = findCollection(state, collectionId);
+  const entry = findCollection(catalog.items, collectionId);
   if (entry !== undefined) return { title: entry.name, kicker: "Sammlung als Quelle" };
   return {
     title: collectionId,
-    kicker: state.status === "ready" ? "Sammlung · nicht in der Liste" : "Sammlung als Quelle",
+    kicker: catalog.status === "ready" ? "Sammlung · nicht in der Liste" : "Sammlung als Quelle",
   };
 }
 
@@ -96,10 +97,10 @@ function SettingsInspector({ value, onChange }: Pick<FileGalleryEditorProps, "va
 }
 
 export function FileGalleryEditor({ value, onChange, loadCollections, loadFiles }: FileGalleryEditorProps): React.ReactElement {
-  const catalog = useCollectionCatalog(loadCollections);
+  const catalog = useEntityCatalog(loadCollections ?? loadAllCollections, { onError: "error" });
   const cachedLoad = useCachedFileLoader(loadFiles);
   const shown = shownSettings(value);
-  const heading = headingOf(shown.collectionId, catalog.state);
+  const heading = headingOf(shown.collectionId, catalog);
   // Im Editor stehen die Felder in der Mitte; ein Inspektor daneben verdoppelte sie.
   const { view } = useConfigShell();
 

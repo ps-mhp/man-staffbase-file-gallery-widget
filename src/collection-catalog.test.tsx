@@ -11,14 +11,11 @@
  * limitations under the License.
  */
 
-import { act, renderHook, waitFor } from "@testing-library/react";
-
 import {
   CollectionEntry,
   filterCollections,
   findCollection,
   loadCollections,
-  useCollectionCatalog,
 } from "./collection-catalog";
 
 const id = (n: number): string => n.toString(16).padStart(24, "0");
@@ -58,26 +55,9 @@ describe("filterCollections", () => {
     expect(filterCollections(collections, "")).toBe(collections);
   });
 
-  it("findet die gewählte Sammlung nur, wenn die Liste da ist", () => {
-    expect(findCollection({ status: "ready", collections }, id(2))).toBe(collections[1]);
-    expect(findCollection({ status: "loading" }, id(2))).toBeUndefined();
-    expect(findCollection({ status: "ready", collections }, null)).toBeUndefined();
-  });
-});
-
-describe("useCollectionCatalog", () => {
-  it("meldet einen Fehler und lädt auf Wunsch neu", async () => {
-    const load = jest
-      .fn<Promise<CollectionEntry[]>, []>()
-      .mockRejectedValueOnce(new Error("HTTP 500"))
-      .mockResolvedValueOnce([{ id: id(1), name: "A", count: 1 }]);
-    const { result } = renderHook(() => useCollectionCatalog(load));
-
-    await waitFor(() => expect(result.current.state.status).toBe("error"));
-    act(() => result.current.reload());
-
-    await waitFor(() =>
-      expect(result.current.state).toEqual({ status: "ready", collections: [{ id: id(1), name: "A", count: 1 }] }),
-    );
+  it("findet die gewählte Sammlung nur, wenn sie in der Liste steht", () => {
+    expect(findCollection(collections, id(2))).toBe(collections[1]);
+    expect(findCollection([], id(2))).toBeUndefined();
+    expect(findCollection(collections, null)).toBeUndefined();
   });
 });

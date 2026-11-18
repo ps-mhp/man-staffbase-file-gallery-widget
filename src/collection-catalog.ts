@@ -12,15 +12,15 @@
  */
 
 /**
- * Die Sammlungen des Datei-Managers für die Seitenleiste „Quelle“: laden,
- * neu laden, durchsuchen.
+ * Die Sammlungen des Datei-Managers für die Seitenleiste „Quelle“: laden und
+ * durchsuchen. Geladen wird mit `useEntityCatalog(…, { onError: "error" })`:
+ * ein Fehler bleibt als eigener Zustand stehen – die Seitenleiste sagt ihn an
+ * und bietet „Erneut versuchen“ und die Eingabe von Hand.
  *
- * Nur im Studio nachgeladen, zusammen mit dem Editor. Ein Fehler bleibt als
- * eigener Zustand stehen – die Seitenleiste sagt ihn an und bietet
- * „Erneut versuchen“ und die Eingabe von Hand.
+ * Nur im Studio nachgeladen, zusammen mit dem Editor.
  */
 
-import * as React from "react";
+import type { EntityCatalog } from "@shared/entity-picker/use-entity-catalog";
 import { isStaffbaseId } from "@shared/staffbase/ids";
 
 import { fetchCollections } from "./file-collection";
@@ -35,15 +35,7 @@ export interface CollectionEntry {
 
 export type CollectionLoader = () => Promise<CollectionEntry[]>;
 
-export type CollectionCatalogState =
-  | { status: "loading" }
-  | { status: "error" }
-  | { status: "ready"; collections: readonly CollectionEntry[] };
-
-export interface CollectionCatalog {
-  state: CollectionCatalogState;
-  reload: () => void;
-}
+export type CollectionCatalog = EntityCatalog<CollectionEntry>;
 
 /** Was das Widget wirklich lädt: alle Sammlungen, die die Person sehen darf. */
 export const loadCollections: CollectionLoader = async () => {
@@ -57,36 +49,6 @@ export const loadCollections: CollectionLoader = async () => {
   });
 };
 
-export function useCollectionCatalog(load: CollectionLoader = loadCollections): CollectionCatalog {
-  const [state, setState] = React.useState<CollectionCatalogState>({ status: "loading" });
-  const [round, setRound] = React.useState(0);
-
-  React.useEffect(() => {
-    // Ein neuer Ladelauf macht das Ergebnis des alten bedeutungslos.
-    let current = true;
-    setState({ status: "loading" });
-    load()
-      .then((collections) => {
-        if (current) setState({ status: "ready", collections });
-      })
-      .catch(() => {
-        if (current) setState({ status: "error" });
-      });
-    return () => {
-      current = false;
-    };
-  }, [load, round]);
-
-  const reload = React.useCallback(() => setRound((value) => value + 1), []);
-  return { state, reload };
-}
-
-const NO_COLLECTIONS: readonly CollectionEntry[] = [];
-
-/** Die Sammlungen, sobald geladen; sonst leer. */
-export const collectionsOf = (state: CollectionCatalogState): readonly CollectionEntry[] =>
-  state.status === "ready" ? state.collections : NO_COLLECTIONS;
-
 /** Die Sammlungen, deren Name oder ID die Suche enthält. */
 export function filterCollections(collections: readonly CollectionEntry[], query: string): readonly CollectionEntry[] {
   const needle = query.trim().toLocaleLowerCase("de");
@@ -97,7 +59,7 @@ export function filterCollections(collections: readonly CollectionEntry[], query
 }
 
 /** Die gewählte Sammlung, wenn sie in der Liste steht. */
-export function findCollection(state: CollectionCatalogState, id: string | null): CollectionEntry | undefined {
+export function findCollection(items: readonly CollectionEntry[], id: string | null): CollectionEntry | undefined {
   if (id === null) return undefined;
-  return collectionsOf(state).find((entry) => entry.id === id);
+  return items.find((entry) => entry.id === id);
 }

@@ -28,7 +28,7 @@ import { ItemList, type ListItem } from "@man/config-ui/sidebar/item-list";
 import { SidebarPanel } from "@man/config-ui/sidebar/sidebar-panel";
 import { SidebarSearch } from "@man/config-ui/sidebar/sidebar-search";
 
-import { CollectionCatalog, CollectionEntry, collectionsOf, filterCollections } from "./collection-catalog";
+import { CollectionCatalog, CollectionEntry, filterCollections } from "./collection-catalog";
 
 /** Kennung der Zeile „Alle Dateien“; eine Sammlung hat immer 24 Hexziffern. */
 export const ALL_FILES_ID = "all";
@@ -87,18 +87,18 @@ function RetryNote({ message, onRetry }: { message: string; onRetry: () => void 
 
 /** Was unter der Liste steht, solange die Sammlungen nicht (alle) da sind. */
 function CatalogNote({ catalog }: { catalog: CollectionCatalog }): React.ReactElement | null {
-  const { state, reload } = catalog;
-  if (state.status === "loading") {
+  const { status, items, reload } = catalog;
+  if (status === "loading") {
     return (
       <p role="status" className={NOTE}>
         Sammlungen werden geladen …
       </p>
     );
   }
-  if (state.status === "error") {
+  if (status === "error") {
     return <RetryNote message="Die Sammlungen konnten nicht geladen werden." onRetry={reload} />;
   }
-  if (state.collections.length === 0) {
+  if (items.length === 0) {
     return <p className={NOTE}>Keine Sammlungen gefunden, die dieses Konto sehen darf.</p>;
   }
   return null;
@@ -106,9 +106,9 @@ function CatalogNote({ catalog }: { catalog: CollectionCatalog }): React.ReactEl
 
 export function SourceSidebar({ catalog, collectionId, onSelect }: SourceSidebarProps): React.ReactElement {
   const [query, setQuery] = React.useState("");
-  const collections = collectionsOf(catalog.state);
+  const collections = catalog.items;
   const items = React.useMemo(() => sourceItems(collections, query), [collections, query]);
-  const ready = catalog.state.status === "ready";
+  const ready = catalog.status === "ready";
   return (
     <SidebarPanel title="Quelle" count={ready ? collections.length + 1 : undefined}>
       {collections.length > 0 && <SidebarSearch aria-label={SEARCH_LABEL} value={query} onValueChange={setQuery} />}
