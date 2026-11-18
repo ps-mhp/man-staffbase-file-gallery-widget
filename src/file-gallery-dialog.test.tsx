@@ -23,10 +23,12 @@ import { act, fireEvent, render } from "@testing-library/react";
 import Form from "@rjsf/mui";
 import validator from "@rjsf/validator-ajv8";
 
-import { modalRoot, settleModal } from "@shared/ui/config-modal.testing";
+import { modalRoot, settleModal, settleEditor, clickElement } from "@shared/ui/config-modal.testing";
 import { LEGACY_ATTRIBUTES, configurationSchema } from "./configuration-schema";
 import { readFileGalleryConfig, resolveFileGallerySettings, serializeFileGalleryConfig } from "./file-gallery-config";
 import { fileGalleryEditorShell, startFileGalleryDialog } from "./file-gallery-dialog";
+
+const EDITOR_SELECTOR = '[aria-label="Quellen"] [role="row"]:nth-child(2)';
 
 const mockEditorLoaded = jest.fn();
 jest.mock("./file-gallery-editor", () => {
@@ -75,21 +77,6 @@ const buttonNamed = (name: string): HTMLElement | null =>
     (button) => button.textContent?.trim() === name || button.getAttribute("aria-label") === name,
   ) ?? null;
 
-/** Ein Klick wie von Hilfsmitteln: react-aria nimmt ihn als Druck an. */
-async function click(element: Element | null): Promise<void> {
-  if (element === null) throw new Error("Nichts zum Klicken gefunden");
-  await act(async () => {
-    (element as HTMLElement).click();
-  });
-}
-
-/** Das Modal lädt nach, der Editor darin noch einmal, dann die Liste: so oft warten, bis alles da ist. */
-async function settleEditor(): Promise<void> {
-  for (let round = 0; round < 8 && inModal('[aria-label="Quellen"] [role="row"]:nth-child(2)') === null; round += 1) {
-    await settleModal();
-  }
-}
-
 /** Der eigene Dialog neben einem fremden mit gleichen Feldnamen. */
 function Dialogs({ formData }: { formData: Record<string, unknown> }): React.ReactElement {
   return (
@@ -113,11 +100,11 @@ async function open(formData: Record<string, unknown>): Promise<{ container: HTM
   await act(async () => {
     stop = startFileGalleryDialog(container);
   });
-  await settleEditor();
+  await settleEditor(EDITOR_SELECTOR);
   return { container, stop };
 }
 
-const apply = (): Promise<void> => click(inModal('[data-testid="config-shell-apply"]'));
+const apply = (): Promise<void> => clickElement(inModal('[data-testid="config-shell-apply"]'));
 
 describe("Nachladen", () => {
   // Muss zuerst laufen: einmal geladen, bleibt das Modul im Speicher.
@@ -191,7 +178,7 @@ describe("startFileGalleryDialog", () => {
   it("übernimmt mit einer Änderung die lesbaren alten Felder; sonst wirkt am Block alles wie bisher", async () => {
     const { container, stop } = await open(LEGACY_BLOCK);
 
-    await click(buttonNamed("Kacheln"));
+    await clickElement(buttonNamed("Kacheln"));
     await apply();
 
     const written = fieldValue(container);
@@ -216,7 +203,7 @@ describe("startFileGalleryDialog", () => {
   it("schreibt Geändertes nach file-gallery-config und lässt die alten Felder stehen", async () => {
     const { container, stop } = await open({ "max-items": 5 });
 
-    await click(buttonNamed("Liste"));
+    await clickElement(buttonNamed("Liste"));
     expect(inModal('[role="status"]')).toHaveTextContent("Darstellung geändert");
     await apply();
 
@@ -242,7 +229,7 @@ describe("startFileGalleryDialog", () => {
     const config = serializeFileGalleryConfig({ filterOperator: "regex", filter: "(" });
     const { container, stop } = await open({ "file-gallery-config": config });
 
-    await click(buttonNamed("Liste"));
+    await clickElement(buttonNamed("Liste"));
     await apply();
 
     expect(fieldValue(container)).toBe(config);
@@ -257,7 +244,7 @@ describe("startFileGalleryDialog", () => {
     const config = serializeFileGalleryConfig({ collectionId: FORMS });
     const { stop } = await open({ "file-gallery-config": config });
 
-    await click(buttonNamed("Desktop"));
+    await clickElement(buttonNamed("Desktop"));
     await settleModal();
 
     expect(inModal('[data-testid="file-gallery-preview"]')).toHaveAttribute("inert");
