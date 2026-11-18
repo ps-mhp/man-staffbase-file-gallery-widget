@@ -22,11 +22,11 @@
  */
 
 import * as React from "react";
-import { Folder, Menu, Search } from "lucide-react";
+import { Folder, Menu } from "lucide-react";
 import { Button } from "@man/config-ui/primitives/button";
-import { Input } from "@man/config-ui/primitives/input";
 import { ItemList, type ListItem } from "@man/config-ui/sidebar/item-list";
 import { SidebarPanel } from "@man/config-ui/sidebar/sidebar-panel";
+import { SidebarSearch } from "@man/config-ui/sidebar/sidebar-search";
 
 import { CollectionCatalog, CollectionEntry, collectionsOf, filterCollections } from "./collection-catalog";
 
@@ -72,38 +72,6 @@ export function sourceItems(collections: readonly CollectionEntry[], query: stri
   return [...all, ...filterCollections(collections, query).map(itemOf)];
 }
 
-interface SearchProps {
-  query: string;
-  onQueryChange: (query: string) => void;
-}
-
-/**
- * Das Suchfeld, beim Scrollen oben stehend. Escape leert es zuerst; erst ein
- * leeres Feld lässt Escape an den Rahmen, der dann schließt.
- */
-function SourceSearch({ query, onQueryChange }: SearchProps): React.ReactElement {
-  return (
-    <div className="sticky top-0 z-10 -mx-2 bg-muted px-4 pb-3">
-      <div className="relative">
-        <Search className="pointer-events-none absolute top-3 left-3 size-4 text-muted-foreground" aria-hidden />
-        <Input
-          type="search"
-          aria-label={SEARCH_LABEL}
-          placeholder={SEARCH_LABEL}
-          value={query}
-          onChange={(event) => onQueryChange(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key !== "Escape" || query === "") return;
-            event.preventDefault();
-            onQueryChange("");
-          }}
-          className="h-10 bg-background pl-[38px]"
-        />
-      </div>
-    </div>
-  );
-}
-
 function RetryNote({ message, onRetry }: { message: string; onRetry: () => void }): React.ReactElement {
   return (
     <div className="flex flex-col items-center gap-3 px-3 py-4 text-center">
@@ -143,7 +111,7 @@ export function SourceSidebar({ catalog, collectionId, onSelect }: SourceSidebar
   const ready = catalog.state.status === "ready";
   return (
     <SidebarPanel title="Quelle" count={ready ? collections.length + 1 : undefined}>
-      {collections.length > 0 && <SourceSearch query={query} onQueryChange={setQuery} />}
+      {collections.length > 0 && <SidebarSearch aria-label={SEARCH_LABEL} value={query} onValueChange={setQuery} />}
       <ItemList
         aria-label="Quellen"
         items={items}
