@@ -26,6 +26,7 @@
 
 import * as React from "react";
 import { Field } from "@man/config-ui/form/field";
+import { FormHeading } from "@man/config-ui/form/form-heading";
 import { FormSection } from "@man/config-ui/form/form-section";
 import type { SegmentedOption } from "@man/config-ui/form/segmented";
 import { SegmentedField } from "@man/config-ui/form/segmented-field";
@@ -130,15 +131,9 @@ export interface SourceHeadingProps {
 /** Der Kopf des Formulars: welche Quelle gilt. */
 export function SourceHeading({ collectionId, title, kicker }: SourceHeadingProps): React.ReactElement {
   return (
-    <div className="flex flex-col gap-1.5" data-testid="file-gallery-heading">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-        <h2 className="text-xl leading-[1.3] font-semibold text-foreground">{title}</h2>
-        <span className="text-[13px] text-muted-foreground">{kicker}</span>
-      </div>
-      {collectionId === null && (
-        <p className={HINT}>Dateien, die in keiner Sammlung liegen, erscheinen dabei nicht.</p>
-      )}
-    </div>
+    <FormHeading title={title} kicker={kicker} data-testid="file-gallery-heading">
+      {collectionId === null && <p className={HINT}>Dateien, die in keiner Sammlung liegen, erscheinen dabei nicht.</p>}
+    </FormHeading>
   );
 }
 
