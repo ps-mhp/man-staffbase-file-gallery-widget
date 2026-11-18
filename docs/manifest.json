@@ -1,6 +1,6 @@
 {
   "title": "Dateigalerie",
-  "summary": "Zeigt die Dateien einer Collection aus dem Datei-Manager als Kachelgalerie an.",
+  "summary": "Zeigt die Dateien einer Sammlung aus dem Datei-Manager als Kachelgalerie an.",
   "icon": "🗂️",
   "pages": [
     { "id": "overview", "title": "Übersicht", "file": "overview.md" },
